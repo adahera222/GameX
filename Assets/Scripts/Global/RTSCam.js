@@ -46,7 +46,7 @@ function Update () {
 	}
 	
 	//Rotate
-	if (Input.GetButton("ScrollButton")){
+	if (Input.GetButton("Rotate")){
 		Rotate(Input.GetAxis("Mouse X"));
 	}
 	
@@ -98,5 +98,6 @@ function CorrectDistance(){
 }
 
 function Rotate(speed : float){
+	//TODO: rotation auf Halbkugel
 	cam.transform.localEulerAngles.y += speed;
 }

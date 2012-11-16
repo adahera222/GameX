@@ -1,9 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Global\MiniMap.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Global\MouseSelect.js">
     <Files>
-      <File FileName="Assets\Scripts\Global\RTSCam.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Global\MiniMap.js" Line="6" Column="1" />
+      <File FileName="Assets\Scripts\Unit\Moving.js" Line="12" Column="2" />
+      <File FileName="Assets\Scripts\Global\Money.js" Line="33" Column="2" />
+      <File FileName="Assets\Scripts\Global\DrawBox.js" Line="4" Column="60" />
+      <File FileName="Assets\Scripts\Global\RTSCam.js" Line="49" Column="29" />
+      <File FileName="Assets\Scripts\Global\MiniMap.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Global\MouseSelect.js" Line="25" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
