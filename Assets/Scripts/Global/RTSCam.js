@@ -1,4 +1,5 @@
 #pragma strict
+#pragma downcast
 
 var speed = 1.0;
 var border = 30.0;
@@ -9,6 +10,18 @@ var maxAngle = 90.0;
 var minAngle = 10.0;
 var cam : Camera;
 private var actualDistance : float;
+
+
+// Draw Global Stats
+function OnGUI() {
+	var money : Money = GameObject.Find("PlayerScripts").GetComponent("Money");
+	var globalBar : GlobalStats = GameObject.Find("GlobalScripts").GetComponent("GlobalStats");
+	var today = System.DateTime.Now;
+	
+	GUI.Box(Rect(Screen.width - globalBar.style.fixedWidth - 80, 0, 0, 0), "", globalBar.style);
+	GUI.Label(Rect(Screen.width-485, 8, 160, 20), "GELD: "+money.Get(), globalBar.textStyle);
+	GUI.Label(Rect(Screen.width-295, 8, 160, 20), "ZEIT: "+today.ToString("HH:mm:ss"), globalBar.textStyle);
+}
 
 function Start () {
 	cam.transform.eulerAngles.x = angle;

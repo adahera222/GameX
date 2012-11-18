@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Programme/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Programme/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +49,12 @@
      <Compile Include="Assets\Scripts\Global\Money.js" />
      <Compile Include="Assets\Scripts\Global\MouseControl.js" />
      <Compile Include="Assets\Scripts\Global\RTSCam.js" />
+     <Compile Include="Assets\Scripts\Styles\ActionBar.js" />
+     <Compile Include="Assets\Scripts\Styles\GlobalStats.js" />
+     <Compile Include="Assets\Scripts\Styles\UnitStatsBar.js" />
+     <Compile Include="Assets\Scripts\Unit\MainBuilding.js" />
      <Compile Include="Assets\Scripts\Unit\Moving.js" />
+     <Compile Include="Assets\Scripts\Unit\Unit.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

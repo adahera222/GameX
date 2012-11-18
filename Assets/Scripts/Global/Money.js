@@ -10,6 +10,10 @@ function Start () {
 	money = startMoney;
 }
 
+function Get() {
+	return money;
+}
+
 /*
 * Fügt dem Geld den Wert v hinzu.
 * Sorgt dafür, dass maxMoney nicht überstiegen wird.
