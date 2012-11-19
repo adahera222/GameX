@@ -1,5 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Unit\Unit.js">
     <Files>
       <File FileName="Assets\Scripts\Unit\Moving.js" Line="1" Column="1" />
@@ -12,6 +13,16 @@
       <File FileName="Assets\Scripts\Global\RTSCam.js" Line="19" Column="32" />
       <File FileName="Assets\Scripts\Unit\MainBuilding.js" Line="20" Column="16" />
       <File FileName="Assets\Scripts\Styles\GlobalStats.js" Line="7" Column="1" />
+=======
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Unit\Moving.js">
+    <Files>
+      <File FileName="Assets\Scripts\Unit\Moving.js" Line="18" Column="17" />
+      <File FileName="Assets\Scripts\Global\Money.js" Line="33" Column="2" />
+      <File FileName="Assets\Scripts\Global\DrawBox.js" Line="4" Column="60" />
+      <File FileName="Assets\Scripts\Global\RTSCam.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Global\MiniMap.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Global\MouseControl.js" Line="109" Column="3" />
+>>>>>>> userprefs....
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
