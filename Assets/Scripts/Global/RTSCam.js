@@ -46,11 +46,11 @@ function Update () {
 	}
 	//down
 	if (Input.mousePosition.y <= border || Input.GetAxis("ScrollVertical") < 0){
-		move(Vector3.back);
+		move((Vector3.back + Vector3.down).normalized);
 	}
 	//up
 	if (Input.mousePosition.y >= Screen.height - border || Input.GetAxis("ScrollVertical") > 0){
-		move(Vector3.forward);
+		move((Vector3.forward + Vector3.up).normalized);
 	}
 	
 	//Zoom
