@@ -13,6 +13,9 @@ function Start () {
 function Update () {
 	if (move){
 		var dir = (moveTo - transform.position).normalized;
+		var lookat = moveTo;
+		lookat.y = transform.position.y;
+		transform.LookAt(lookat);
 		cc.Move(dir * speed * Time.deltaTime);
 		if (dir.Equals(Vector3.down)){
 			move = false;
