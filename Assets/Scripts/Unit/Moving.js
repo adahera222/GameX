@@ -1,6 +1,6 @@
 #pragma strict
 
-var speed = 1.0;
+private var speed = 1.0;
 
 private var move = false;
 private var moveTo : Vector3;
@@ -8,6 +8,8 @@ private var cc : CharacterController;
 
 function Start () {
 	cc = gameObject.GetComponent(CharacterController);
+	var attr : Attributes = gameObject.GetComponent(Attributes);
+	speed = attr.moveSpeed;
 }
 
 function Update () {
@@ -28,4 +30,9 @@ function OnMoveTo(goal : Vector3){
 	move = true;
 }
 
+function OnStopMovement(go : GameObject){
+	move = false;
+}
+
 @script RequireComponent(CharacterController)
+@script RequireComponent(Attributes)

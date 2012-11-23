@@ -10,7 +10,7 @@ private var money : Money;
 function Start ()
 {
 	lTime=Time.time;
-	money = GameObject.Find("PlayerScripts").GetComponent("Money");
+	money = GameObject.Find("PlayerScripts").GetComponent(Money);
 }
 
 function Update ()

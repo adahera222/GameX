@@ -3,6 +3,7 @@
 var selectionMethode = "OnSelection";
 var deselectionMethode = "OnDeselection";
 var moveMethode = "OnMoveTo";
+var attackMethode = "OnAttack";
 var boxSelectionMinDistance = 10;
 var boxColor = Color.green;
 var multipleSelectTag = "Player";
@@ -103,9 +104,16 @@ function SelectMultiple(start : Vector2, end : Vector2){
 }
 
 function Action(){
-	var goal : Vector3 = getClickedPoint();
-	for (var go : GameObject in selected){
-		go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
+	var obj = GetClickedGameObject();
+	if (obj.GetComponent("Unit") != null){
+		for (var go : GameObject in selected){
+			go.SendMessage(attackMethode, obj, SendMessageOptions.DontRequireReceiver);
+		}
+	}else{
+		var goal : Vector3 = getClickedPoint();
+		for (var go : GameObject in selected){
+			go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
+		}
 	}
 }
 
@@ -113,7 +121,8 @@ function Action(){
 function getClickedPoint() : Vector3{
 	var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 	var hit : RaycastHit;
-	if(Physics.Raycast(ray, hit)){
+	var layerMask = 1 << 8;
+	if(Physics.Raycast(ray, hit, layerMask)){
 		return hit.point;
 	}
 	return;

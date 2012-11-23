@@ -52,6 +52,8 @@
      <Compile Include="Assets\Scripts\Styles\ActionBar.js" />
      <Compile Include="Assets\Scripts\Styles\GlobalStats.js" />
      <Compile Include="Assets\Scripts\Styles\UnitStatsBar.js" />
+     <Compile Include="Assets\Scripts\Unit\Attack.js" />
+     <Compile Include="Assets\Scripts\Unit\Attributes.js" />
      <Compile Include="Assets\Scripts\Unit\MainBuilding.js" />
      <Compile Include="Assets\Scripts\Unit\Moving.js" />
      <Compile Include="Assets\Scripts\Unit\Unit.js" />
