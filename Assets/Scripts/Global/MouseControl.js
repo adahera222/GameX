@@ -39,7 +39,8 @@ function Select(){
 		if (obj != null){
 			if (selected.Length > 0){
 				for (var go : GameObject in selected){
-					go.SendMessage(deselectionMethode, obj, SendMessageOptions.DontRequireReceiver);
+					if(go != null)
+						go.SendMessage(deselectionMethode, obj, SendMessageOptions.DontRequireReceiver);
 				}
 				selected = new GameObject[0];
 			}
@@ -105,14 +106,19 @@ function SelectMultiple(start : Vector2, end : Vector2){
 
 function Action(){
 	var obj = GetClickedGameObject();
-	if (obj.GetComponent("Unit") != null){
-		for (var go : GameObject in selected){
-			go.SendMessage(attackMethode, obj, SendMessageOptions.DontRequireReceiver);
-		}
-	}else{
-		var goal : Vector3 = getClickedPoint();
-		for (var go : GameObject in selected){
-			go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
+
+	if(obj != null) {
+		if (obj.GetComponent("Unit") != null){
+			for (var go : GameObject in selected){
+				if(go != null)
+					go.SendMessage(attackMethode, obj, SendMessageOptions.DontRequireReceiver);
+			}
+		}else{
+			var goal : Vector3 = getClickedPoint();
+			for (var go : GameObject in selected){
+				if(go != null)
+					go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
+			}
 		}
 	}
 }

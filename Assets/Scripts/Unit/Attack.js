@@ -1,7 +1,10 @@
 #pragma strict
 #pragma downcast
+
 var moveMethode = "OnMoveTo";
 var stopMovementMethode = "OnStopMovement";
+var attackedMethod = "OnAttacked";
+
 private var attributes : Attributes;
 private var target : GameObject;
 private var targetAttributes : Attributes;
@@ -13,6 +16,8 @@ function Start () {
 	attributes = gameObject.GetComponent(Attributes);
 	if (gameObject.tag == "Player"){
 		money = GameObject.Find("PlayerScripts").GetComponent(Money);
+	} else if(gameObject.tag == "Enemy") {
+		money = GameObject.Find("EnemyScripts").GetComponent(Money);
 	}
 	if (gameObject.GetComponent(Moving) != null){
 		moveable = true;
@@ -22,6 +27,12 @@ function Start () {
 function Update () {
 	if (target && nextTime <= Time.time){
 		var hits : RaycastHit[];
+
+		// rotate in direction of victim
+		var lookat = target.transform.position;
+		lookat.y = transform.position.y;
+		transform.LookAt(lookat);
+
 		var dir = target.transform.position - transform.position;
 		hits = Physics.RaycastAll(transform.position, dir, attributes.attackRange);
 		var hit = false;
@@ -34,6 +45,8 @@ function Update () {
 				var dmg = Mathf.Max(1, damageFactor * attributes.attack * (1-def/(50+def)));
 				if (targetAttributes.Damage(dmg)){
 					money.Add(targetAttributes.valueOnKill);
+				} else {
+					target.SendMessage(attackedMethod, gameObject, SendMessageOptions.DontRequireReceiver);
 				}
 				nextTime = Time.time + 1/attributes.attackspeed;
 				hit = true;
@@ -49,6 +62,15 @@ function Update () {
 	}
 }
 
+function getTarget() {
+	return target;
+}
+
+function stopAttacking() {
+	target = null;
+	targetAttributes = null;
+}
+
 function OnAttack(obj : GameObject){
 	if (gameObject.tag != obj.tag){
 		targetAttributes = obj.GetComponent(Attributes);
@@ -58,7 +80,7 @@ function OnAttack(obj : GameObject){
 	}
 }
 
-function OnDrawGizmosSelected(){
+function OnDrawGizmos(){
 	if (attributes != null){
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position, attributes.attackRange);

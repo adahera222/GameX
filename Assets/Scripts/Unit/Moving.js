@@ -15,11 +15,13 @@ function Start () {
 function Update () {
 	if (move){
 		var dir = (moveTo - transform.position).normalized;
+		var pos = (moveTo - transform.position).sqrMagnitude;
 		var lookat = moveTo;
 		lookat.y = transform.position.y;
 		transform.LookAt(lookat);
 		cc.Move(dir * speed * Time.deltaTime);
-		if (dir.Equals(Vector3.down)){
+		//if (dir.Equals(Vector3.down)){
+		if(pos < 1.1){
 			move = false;
 		}
 	}
@@ -32,6 +34,10 @@ function OnMoveTo(goal : Vector3){
 
 function OnStopMovement(go : GameObject){
 	move = false;
+}
+
+function isMoving() {
+	return move;
 }
 
 @script RequireComponent(CharacterController)

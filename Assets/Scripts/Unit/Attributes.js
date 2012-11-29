@@ -1,18 +1,23 @@
 #pragma strict
 #pragma downcast
+
 enum UnitType { Building, Unit }
+
 enum AttackType {	Explosion = 0, 
 					Gewehr = 1,
 					Panzerbrecher = 2};
+
 enum DefenseType  {	Gebaeude = 0,
 					Schutzweste = 1, 
 					Panzerung = 2};
+
 static var damageFactors : float[] = new Array (
 //DefTyp: 			Gebäude	Schutzw.	Panzerung
 /*Explosion*/		2.0, 	1.0, 		1.5,
 /*Gewehr*/			0.2, 	1.0, 		0.3,
 /*Panzerbr*/		1.0, 	1.0, 		2.5
-	).ToBuiltin(float);
+).ToBuiltin(float);
+
 static var attacktypes = 3;
 static var defensetypes = 3;	 
 

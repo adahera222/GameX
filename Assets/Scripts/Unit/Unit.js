@@ -6,12 +6,13 @@ private var statsBar : UnitStatsBar;
 private var drawActionBar = false;
 private var sObj : GameObject;
 private var attributes : Attributes;
-
+private var money : Money;
 
 function Start () {
 	actionBar = GameObject.Find("GlobalScripts").GetComponent(ActionBar);
 	statsBar = GameObject.Find("GlobalScripts").GetComponent(UnitStatsBar);
 	attributes = gameObject.GetComponent(Attributes);
+	money = GameObject.Find("PlayerScripts").GetComponent(Money);
 }
 
 function Update () {
@@ -39,15 +40,31 @@ function OnGUI() {
 				
 			GUI.EndGroup();
 		} else if(attributes.unitType == UnitType.Building) {
+
+			// draw building actions
+
 			var mB : MainBuilding = gameObject.GetComponent(MainBuilding);
+
+			GUILayout.BeginArea (Rect(mm.minimapTexture.width+40, Screen.height-50, 480, 40));
+			GUILayout.BeginHorizontal();
+
 			if(mB != null) {
 				for(var gO : GameObject in mB.objectsCanCreate) {
 					var unitAttributes : Attributes = gO.GetComponent(Attributes);
-					if(GUI.Button(Rect(mm.minimapTexture.width+40, Screen.height-50, 80, 40), unitAttributes.unitName)) {
-						Instantiate (gO, Vector3(2, 1, 1), Quaternion.identity);
+					if(GUILayout.Button(unitAttributes.unitName)) {
+						if(money.Pay(unitAttributes.cost)) {
+							Instantiate (gO, Vector3(2, 1, 1), Quaternion.identity);
+						}
+						else {
+							// TODO show message that not enaught money
+							Debug.Log("TODO: Not enaugh money");
+						}
 					}
 				}
 			}
+
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
 		}
 	}
 }
@@ -60,5 +77,13 @@ function OnDeselection(obj : GameObject) {
 	drawActionBar = false;
 	sObj = null;
 }
+
+function OnDrawGizmos(){
+	if (attributes != null){
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireSphere(transform.position, attributes.sightRange);
+	}
+}
+
 
 @script RequireComponent(Attributes)
