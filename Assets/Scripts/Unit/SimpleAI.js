@@ -33,8 +33,12 @@ function Update () {
 
 function OnAttacked(attacker: GameObject) {
 	var dist = (attacker.transform.position - transform.position).magnitude;
-	if(type == AIType.defensive || type == AIType.aggressive) {
+	if((type == AIType.defensive || type == AIType.aggressive) &&
+		(gameObject.GetComponent(Moving) == null || !gameObject.GetComponent(Moving).isMoving()) ) {
 		if(attributes.sightRange >= dist)
 			gameObject.SendMessage(mouseControl.attackMethode, attacker, SendMessageOptions.DontRequireReceiver);
 	}
 }
+
+@script RequireComponent(Attributes)
+@script RequireComponent(Attack)
