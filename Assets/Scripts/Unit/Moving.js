@@ -45,12 +45,13 @@ function Move(){
 		var lookat = moveTo;
 		lookat.y = transform.position.y;
 		lookat -= transform.position;
-		//ein bisschen in die Richtung des Ziels rotieren
-		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookat), .1);
 		
 		
+
+		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookat), 0.1);
+
 		var dir = transform.TransformDirection(Vector3.forward);
-		
+
 		var maxExtend = Mathf.Max(gameObject.collider.bounds.extents.x, gameObject.collider.bounds.extents.z);
 		
 		//Ray-Reichweite festlegen:
@@ -58,7 +59,8 @@ function Move(){
 		//var range = Mathf.Min(attributes.sightRange, Vector3.Distance(transform.position, moveTo));
 		
 		//kurze Strahlen: Teilweise gut, findet Weg in enge, kurvige Gänge, aber nicht mehr aus Räumen raus. Weicht Hindernissen spät aus.
-		var range = Mathf.Min(maxExtend*3, Vector3.Distance(transform.position, moveTo));
+		var range = Mathf.Min(maxExtend*2, Vector3.Distance(transform.position, moveTo));
+
 		
 		if ((moveTo - transform.position).sqrMagnitude < 1.1){
 			move = false;
@@ -67,24 +69,57 @@ function Move(){
 		
 		var left = transform.TransformDirection(Vector3.left) * maxExtend;
 		var moveOk = false;
+
+		var dist1 = 0;
+		var dist2 = 0;
+		var maxDist = 0;
+		var bestI = 0;
 		
 		if (Physics.Raycast(transform.position, dir, range) ||
 			Physics.Raycast(transform.position + left, dir, range) || 
 			Physics.Raycast(transform.position - left, dir, range)){
 			//etwas ist im Weg
-			
-			for (var i = 1; i<=150; i++){
-				if (TestWay(dir, i, range, left)){
-					transform.Rotate(0, i, 0);
-					dir = transform.TransformDirection(Vector3.forward);
-					moveOk = true;
-					break;
-				}else if (TestWay(dir, -i, range, left)){
-					transform.Rotate(0, -i, 0);
-					dir = transform.TransformDirection(Vector3.forward);
-					moveOk = true;
-					break;
+
+			// TODO: optimieren: divide and conquer ;)
+			for(var j=0; j<=360; j+=45) {
+				for (var i = j; i<=j+60; i += 2*(3/range)){
+
+					dist1 = TestWay(dir, i, range*(1+i/8), left).distance;
+
+					if ( dist1 < 0) {
+						transform.Rotate(0, i, 0);
+						dir = transform.TransformDirection(Vector3.forward);
+						moveOk = true;
+						break;
+					} else {
+						dist2 = TestWay(dir, -i, range*(1+i/8), left).distance;
+
+						if (dist2 < 0){
+							transform.Rotate(0, -i, 0);
+							dir = transform.TransformDirection(Vector3.forward);
+							moveOk = true;
+							break;
+						} else { // in door
+							if(maxDist < Mathf.Max(dist1, dist2)) {
+
+								maxDist = Mathf.Max(dist1, dist2);
+								
+								if(dist1 > dist2)
+									bestI = i;
+								else
+									bestI = -i;
+							}
+						}
+					}
 				}
+				if(moveOk)
+					break;
+			}
+			
+			if(!moveOk) {
+				transform.Rotate(0, bestI, 0);
+				dir = transform.TransformDirection(Vector3.forward);
+				moveOk = true;
 			}
 		}else{
 			//nichts ist im Weg
@@ -92,9 +127,10 @@ function Move(){
 		}
 		
 		if (moveOk){
-			Debug.DrawRay(transform.position, dir*range, Color.blue);
-			Debug.DrawRay(transform.position + left, dir*range, Color.blue);
-			Debug.DrawRay(transform.position - left, dir*range, Color.blue);
+			// Debug.DrawRay(transform.position, dir*range, Color.blue);
+			// Debug.DrawRay(transform.position + left, dir*range, Color.blue);
+			// Debug.DrawRay(transform.position - left, dir*range, Color.blue);
+
 			dir.y -= 1;
 			cc.Move(dir * speed * Time.deltaTime);
 		}
@@ -102,19 +138,49 @@ function Move(){
 	}
 }
 
-function TestWay(dir : Vector3, deg : float, range : float, left : Vector3) : boolean{
+function TestWay(dir : Vector3, deg : float, range : float, left : Vector3) : RaycastHit{
 	var quat : Quaternion = Quaternion.AngleAxis(deg, Vector3.up);
 	var newDir = quat * dir;
+	var hitM : RaycastHit;
+	var hitL : RaycastHit;
+	var hitR : RaycastHit;
 	
+	Debug.DrawRay(transform.position, newDir*range, Color.blue);
+	Debug.DrawRay(transform.position + left, newDir*range, Color.white);
+	Debug.DrawRay(transform.position - left, newDir*range, Color.white);
 	
+	if (Physics.Raycast(transform.position, newDir, hitM, range) ||
+		Physics.Raycast(transform.position + left, newDir, hitL, range) ||
+		Physics.Raycast(transform.position - left, newDir, hitR, range)){
+
+		if(hitM.distance == 0)
+			hitM.distance = 99999999;
+		if(hitL.distance == 0)
+			hitL.distance = 99999999;
+		if(hitR.distance == 0)
+			hitR.distance = 99999999;
+
+
+		
+		if(hitM.distance > hitL.distance && hitM.distance > hitR.distance)
+			return hitM;
+		else if(hitL.distance > hitM.distance && hitL.distance > hitR.distance)
+			return hitL;
+		else if(hitR.distance > hitM.distance && hitR.distance > hitL.distance)
+			return hitR;
+		else if(hitR.distance > hitL.distance)
+			return hitR;
+		else
+			return hitL;
+		
 	
-	if (Physics.Raycast(transform.position, newDir, range) ||
-		Physics.Raycast(transform.position + left, newDir, range) || 
-		Physics.Raycast(transform.position - left, newDir, range)){
-		return false;
 	}
+
+	// no hit, yea
+	hitM = new RaycastHit();
+	hitM.distance = -1;
 	
-	return true;
+	return hitM;
 }
 
 function OnMoveTo(goal : Vector3){
