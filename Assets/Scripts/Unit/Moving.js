@@ -7,6 +7,10 @@ private var move = false;
 private var moveTo : Vector3;
 private var cc : CharacterController;
 private var attributes : Attributes;
+private var lastWPPos : Vector3[] = new Vector3[20];
+private var lastWPRot : Quaternion[] = new Quaternion[20];
+private var wp = 0;
+private var disabledTurningTill : float = 0.0;
 
 function Start () {
 	cc = gameObject.GetComponent(CharacterController);
@@ -46,28 +50,29 @@ function Move(){
 		lookat.y = transform.position.y;
 		lookat -= transform.position;
 		
-		
-
-		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookat), 0.1);
-
-		var dir = transform.TransformDirection(Vector3.forward);
-
-		var maxExtend = Mathf.Max(gameObject.collider.bounds.extents.x, gameObject.collider.bounds.extents.z);
-		
-		//Ray-Reichweite festlegen:
-		//lange Strahlen: Teilweise gut, auf freier Fläche mit Hinternissen schöne Wege. Findet nicht den Weg in enge, kurvige Gänge zu einem Raum
-		//var range = Mathf.Min(attributes.sightRange, Vector3.Distance(transform.position, moveTo));
-		
-		//kurze Strahlen: Teilweise gut, findet Weg in enge, kurvige Gänge, aber nicht mehr aus Räumen raus. Weicht Hindernissen spät aus.
-		var range = Mathf.Min(maxExtend*2, Vector3.Distance(transform.position, moveTo));
-
-		
-		if ((moveTo - transform.position).sqrMagnitude < 1.1){
-			move = false;
-			return;
+		//nur leicht zum Ziel drehen, wenn es nicht ausgeschaltet ist
+		if (Time.time >= disabledTurningTill){
+			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookat), 0.1);
 		}
 		
-		var left = transform.TransformDirection(Vector3.left) * maxExtend;
+		var dir = transform.forward;
+		var maxExtend = Mathf.Max(gameObject.collider.bounds.extents.x, gameObject.collider.bounds.extents.z);
+		var range : float;
+		
+		//Wenn das Drehen ausgeschaltet ist, die Reichweite senken um kleinere Löcher evtl. zu treffen
+		if (Time.time >= disabledTurningTill){
+			range = Mathf.Min(maxExtend*3, Vector3.Distance(transform.position, moveTo));
+		}else{
+			range = Mathf.Min(maxExtend*2, Vector3.Distance(transform.position, moveTo));
+		}
+		
+		//Falls man nah genug am Ziel ist anhalten
+		if ((moveTo - transform.position).sqrMagnitude < 1.1){
+			move = false;
+			//return;
+		}
+		
+		var left = -transform.right * maxExtend;
 		var moveOk = false;
 
 		var dist1 = 0;
@@ -79,7 +84,9 @@ function Move(){
 			Physics.Raycast(transform.position + left, dir, range) || 
 			Physics.Raycast(transform.position - left, dir, range)){
 			//etwas ist im Weg
-
+		
+/* Ich versteh nicht ganz, wie das hier funktionieren soll. Bist du sicher, dass die i's und j's immer richtig sind?
+	Kommentare wären super ;D
 			// TODO: optimieren: divide and conquer ;)
 			for(var j=0; j<=360; j+=45) {
 				for (var i = j; i<=j+60; i += 2*(3/range)){
@@ -121,19 +128,70 @@ function Move(){
 				dir = transform.TransformDirection(Vector3.forward);
 				moveOk = true;
 			}
+*/
+			
+			//Ich hab erstmal wieder das "alte" von mir reingetan
+			//Abwechselnd nach links und rechts "drehen" und gucken, wann der Weg frei ist
+			for (var i = 1; i<=150; i++){
+				if (TestWay1(dir, i, range, left)){
+					transform.Rotate(0, i, 0);
+					dir = transform.forward;
+					moveOk = true;
+					break;
+				}else if (TestWay1(dir, -i, range, left)){
+					transform.Rotate(0, -i, 0);
+					dir = transform.forward;
+					moveOk = true;
+					break;
+				}
+			}
+		
 		}else{
 			//nichts ist im Weg
 			moveOk = true;
 		}
 		
 		if (moveOk){
-			// Debug.DrawRay(transform.position, dir*range, Color.blue);
-			// Debug.DrawRay(transform.position + left, dir*range, Color.blue);
-			// Debug.DrawRay(transform.position - left, dir*range, Color.blue);
-
-			dir.y -= 1;
+			 Debug.DrawRay(transform.position, dir*range, Color.blue);
+			 Debug.DrawRay(transform.position + left, dir*range, Color.blue);
+			 Debug.DrawRay(transform.position - left, dir*range, Color.blue);
+			
+			//schwerkraft!
+			dir.y -= 9.81;
+			//bewegen
 			cc.Move(dir * speed * Time.deltaTime);
 		}
+		
+		//Waypoint setzen, falls man außerhalb des letzen ist.
+	 	if (!gameObject.collider.bounds.Contains(lastWPPos[wp])){
+	 		wp = (wp+1)%lastWPPos.length;
+	 		lastWPPos[wp] = transform.position;
+	 		lastWPRot[wp] = transform.rotation;
+	 	}
+	 	
+	 	//alle Waypoints testen
+	 	for (var x = 0; x < lastWPPos.length; x++){
+	 		//Wenn sie nicht der aktuelle sind oder gleich wie der aktuelle
+	 		//Und wir ihn aktuell berühren
+	 		if (x != wp && lastWPPos[x] != lastWPPos[wp] &&
+	 			gameObject.collider.bounds.Contains(lastWPPos[x])){
+ 				
+ 				//Das "zum Ziel drehen" für 2 Sekunden ausschalten
+ 				//Die Zeit muss eigentlich abhängig von der Umgebung variable sein
+ 				//evtl. kann man das auch abhängig davon machen, welchen Waypoint man
+ 				//berührt hat?
+ 				disabledTurningTill = Time.time + 2;
+ 				//Die Rotation von dem Waypoint annehmen
+ 				transform.rotation = lastWPRot[x];
+ 				
+ 				//Alle Waypoints auf die aktuelle Position setzen (sonst gibts lustiges hin und her gezitter!)
+ 				for (var y = 0; y < lastWPPos.length; y++){
+					lastWPPos[y] = transform.position;
+					lastWPRot[y] = transform.rotation;
+
+	 			}
+	 		}
+	 	}
 		
 	}
 }
@@ -183,15 +241,37 @@ function TestWay(dir : Vector3, deg : float, range : float, left : Vector3) : Ra
 	return hitM;
 }
 
+function TestWay1(dir : Vector3, deg : float, range : float, left : Vector3) : boolean{
+	var quat : Quaternion = Quaternion.AngleAxis(deg, Vector3.up);
+	var newDir = quat * dir;
+	
+	if (Physics.Raycast(transform.position, newDir, range) ||
+		Physics.Raycast(transform.position + left, newDir, range) ||
+		Physics.Raycast(transform.position - left, newDir, range)){
+		//etwas ist im Weg
+		return false;
+	}
+	//nichts ist im Weg
+	return true;
+}
+
 function OnMoveTo(goal : Vector3){
 	moveTo = goal;
 	
 	if (!oldMoveing){
+		//alle Waypoints auf die aktuelle Position setzen
+		for (var i = 0; i < lastWPPos.length; i++){
+			lastWPPos[i] = transform.position;
+			lastWPRot[i] = transform.rotation;
+		}
+		//aktuellen Waypoint auf 0 setzen (kann man eigentlich auch lassen, dürfte egal sein)
+		wp = 0;
+		//zum Ziel gucken
 		var lookat = moveTo;
 		lookat.y = transform.position.y;
 		transform.LookAt(lookat);
 	}
-	
+	//bewegung starten
 	move = true;
 }
 
@@ -205,8 +285,19 @@ function isMoving() {
 
 function OnDrawGizmos(){
 	if (move){
+		//Ziel als grüne Kugel:
 		Gizmos.color = Color.green;
-		Gizmos.DrawSphere(moveTo, .5);
+		Gizmos.DrawSphere(moveTo, .2);
+		
+		//alle Waypoints als weiße Kugeln. Wenn ein Waypoint berührt wird: rote Kugel
+		for (var i = 0; i < lastWPPos.length; i++){
+			if (!gameObject.collider.bounds.Contains(lastWPPos[i])){
+				Gizmos.color = Color.white;
+			}else{
+				Gizmos.color = Color.red;
+			}
+			Gizmos.DrawSphere(lastWPPos[i], .1);
+		}
 	}
 }
 

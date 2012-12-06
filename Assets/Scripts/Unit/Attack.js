@@ -11,6 +11,7 @@ private var targetAttributes : Attributes;
 private var nextTime : float = 0.0;
 private var money : Money;
 private var moveable = false;
+private var sentMoveTo : Vector3;
 
 function Start () {
 	attributes = gameObject.GetComponent(Attributes);
@@ -56,8 +57,12 @@ function Update () {
 		if (!hit && moveable){
 			var dist = dir.magnitude;
 			var factor = 1 - attributes.attackRange / dist;
-			var moveTo : Vector3 = Vector3.Lerp(transform.position, target.transform.position, factor);
-			gameObject.SendMessage(moveMethode, moveTo, SendMessageOptions.DontRequireReceiver);
+			var moveTo : Vector3 = target.transform.position;
+			
+			if (!moveTo.Equals(sentMoveTo)){
+				sentMoveTo = moveTo;
+				gameObject.SendMessage(moveMethode, moveTo, SendMessageOptions.DontRequireReceiver);
+			}
 		}
 	}
 }
@@ -69,6 +74,12 @@ function getTarget() {
 function stopAttacking() {
 	target = null;
 	targetAttributes = null;
+}
+
+function OnMoveTo(goal : Vector3){
+	if (sentMoveTo != goal){
+		stopAttacking();
+	}
 }
 
 function OnAttack(obj : GameObject){

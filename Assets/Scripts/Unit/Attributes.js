@@ -30,7 +30,8 @@ var valueOnKill = 0;
 var moveSpeed = 1.0;
 var sightRange = 1.0;
 
-var hitpoints = 1;
+var hitpoints : float = 1;
+var maxHitpoints : float = 1;
 var defense = 0;
 var defenseType : DefenseType;
 var attack = 0;
@@ -47,6 +48,10 @@ private var experience = 0;
 */
 function Damage(dmg : int) : boolean{
 	hitpoints -= dmg;
+	var healthbar = gameObject.GetComponent(SimpleHealthbar);
+	if (healthbar != null){
+		healthbar.Update();
+	}
 	
 	if (hitpoints <= 0){
 		GameObject.Destroy(gameObject);
