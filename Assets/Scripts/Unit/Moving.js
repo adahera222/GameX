@@ -76,7 +76,7 @@ function Move(){
 		//Falls man nah genug am Ziel ist anhalten
 		var countReached : int = reached[moveTo];
 		
-		if ((moveTo - transform.position).sqrMagnitude < Mathf.Pow((gameObject.collider.bounds.extents.y/2.0+maxExtend*countReached), (7.0/10.0)) ){
+		if ((moveTo - transform.position).sqrMagnitude < Mathf.Pow((gameObject.collider.bounds.extents.y/2.0+maxExtend*countReached), (9/10.0)) ){
 			if(reached.Contains(moveTo)) {
 				var v : int;
 				v = reached[moveTo];
@@ -345,7 +345,7 @@ function OnDrawGizmos(){
 		
 		Gizmos.color = Color.cyan;
 
-		Gizmos.DrawWireSphere(moveTo, Mathf.Pow((gameObject.collider.bounds.extents.y/2.0+maxExtend*countReached), (7.0/10.0)));
+		Gizmos.DrawWireSphere(moveTo, Mathf.Pow((gameObject.collider.bounds.extents.y/2.0+maxExtend*countReached), (4.5/10.0)));
 	}
 }
 
