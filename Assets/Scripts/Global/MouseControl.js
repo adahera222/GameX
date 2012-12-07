@@ -88,7 +88,8 @@ function SelectMultiple(start : Vector2, end : Vector2){
 	//Alle vorher ausgewählten Einheiten abwählen
 	if (selected.Length > 0){
 		for (var go : GameObject in selected){
-			go.SendMessage(deselectionMethode, go, SendMessageOptions.DontRequireReceiver);
+			if(go != null)
+				go.SendMessage(deselectionMethode, go, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 	//Alle Einheiten, die in der Box sind andwählen
@@ -122,6 +123,7 @@ function Action(){
 		}
 	}
 }
+
 
 
 function getClickedPoint() : Vector3{

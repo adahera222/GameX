@@ -53,7 +53,7 @@ function OnGUI() {
 					var unitAttributes : Attributes = gO.GetComponent(Attributes);
 					if(GUILayout.Button(unitAttributes.unitName)) {
 						if(money.Pay(unitAttributes.cost)) {
-							Instantiate (gO, Vector3(2, 1, 1), Quaternion.identity);
+							Instantiate (gO, Vector3(2, gO.collider.bounds.center.y, 1), Quaternion.identity);
 						}
 						else {
 							// TODO show message that not enaught money

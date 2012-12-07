@@ -32,7 +32,7 @@ function Update () {
 		// rotate in direction of victim
 		var lookat = target.transform.position;
 		lookat.y = transform.position.y;
-		transform.LookAt(lookat);
+		//transform.LookAt(lookat);
 
 		var dir = target.transform.position - transform.position;
 		hits = Physics.RaycastAll(transform.position, dir, attributes.attackRange);

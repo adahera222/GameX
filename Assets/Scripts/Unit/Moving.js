@@ -1,16 +1,20 @@
 #pragma strict
+#pragma downcast
 
-var oldMoveing = false;
+
+public static var reached : Hashtable = new Hashtable();
+private var oldMoveing = false;
 
 private var speed = 1.0;
 private var move = false;
 private var moveTo : Vector3;
 private var cc : CharacterController;
 private var attributes : Attributes;
-private var lastWPPos : Vector3[] = new Vector3[20];
-private var lastWPRot : Quaternion[] = new Quaternion[20];
+private var lastWPPos : Vector3[] = new Vector3[40];
+private var lastWPRot : Quaternion[] = new Quaternion[40];
 private var wp = 0;
 private var disabledTurningTill : float = 0.0;
+
 
 function Start () {
 	cc = gameObject.GetComponent(CharacterController);
@@ -30,11 +34,13 @@ function Update () {
 function OldMove(){
 	if (move){
 		var dir = (moveTo - transform.position).normalized;
+		dir.y = 0;
 		var pos = (moveTo - transform.position).sqrMagnitude;
 		var lookat = moveTo;
 		lookat.y = transform.position.y;
 		transform.LookAt(lookat);
-		cc.Move(dir * speed * Time.deltaTime);
+		//cc.Move(dir * speed * Time.deltaTime);
+		transform.position+=dir*speed*Time.deltaTime;
 		//if (dir.Equals(Vector3.down)){
 		if(pos < 1.1){
 			move = false;
@@ -65,9 +71,18 @@ function Move(){
 		}else{
 			range = Mathf.Min(maxExtend*2, Vector3.Distance(transform.position, moveTo));
 		}
+
 		
 		//Falls man nah genug am Ziel ist anhalten
-		if ((moveTo - transform.position).sqrMagnitude < 1.1){
+		var countReached : int = reached[moveTo];
+		
+		if ((moveTo - transform.position).sqrMagnitude < Mathf.Pow((gameObject.collider.bounds.extents.y/2.0+maxExtend*countReached), (7.0/10.0)) ){
+			if(reached.Contains(moveTo)) {
+				var v : int;
+				v = reached[moveTo];
+				reached[moveTo] = v+1;			
+			}
+
 			move = false;
 			//return;
 		}
@@ -132,23 +147,42 @@ function Move(){
 			
 			//Ich hab erstmal wieder das "alte" von mir reingetan
 			//Abwechselnd nach links und rechts "drehen" und gucken, wann der Weg frei ist
-			for (var i = 1; i<=150; i++){
-				if (TestWay1(dir, i, range, left)){
+			for (var i = 1; i<=180; i++){
+				dist1 = TestWay(dir, i, range, left).distance;
+				if (dist1 < 0){
 					transform.Rotate(0, i, 0);
 					dir = transform.forward;
 					moveOk = true;
 					break;
-				}else if (TestWay1(dir, -i, range, left)){
-					transform.Rotate(0, -i, 0);
-					dir = transform.forward;
-					moveOk = true;
-					break;
+				}else {
+				dist2 = TestWay(dir, -i, range, left).distance;
+					if (dist2 < 0){
+						transform.Rotate(0, -i, 0);
+						dir = transform.forward;
+						moveOk = true;
+						break;
+					} else { // in door
+						if(maxDist < Mathf.Max(dist1, dist2)) {
+
+							maxDist = Mathf.Max(dist1, dist2);
+							
+							if(dist1 > dist2)
+								bestI = i;
+							else
+								bestI = -i;
+						}
+					}
 				}
 			}
 		
 		}else{
 			//nichts ist im Weg
 			moveOk = true;
+		}
+		if(!moveOk) {
+				transform.Rotate(0, bestI, 0);
+				dir = transform.TransformDirection(Vector3.forward);
+				moveOk = true;
 		}
 		
 		if (moveOk){
@@ -158,8 +192,10 @@ function Move(){
 			
 			//schwerkraft!
 			dir.y -= 9.81;
+			dir.y = 0;
 			//bewegen
-			cc.Move(dir * speed * Time.deltaTime);
+			//cc.Move(dir * speed * Time.deltaTime);
+			transform.position += dir*speed*Time.deltaTime;
 		}
 		
 		//Waypoint setzen, falls man außerhalb des letzen ist.
@@ -180,7 +216,7 @@ function Move(){
  				//Die Zeit muss eigentlich abhängig von der Umgebung variable sein
  				//evtl. kann man das auch abhängig davon machen, welchen Waypoint man
  				//berührt hat?
- 				disabledTurningTill = Time.time + 2;
+ 				disabledTurningTill = Time.time + 1.5;
  				//Die Rotation von dem Waypoint annehmen
  				transform.rotation = lastWPRot[x];
  				
@@ -269,7 +305,12 @@ function OnMoveTo(goal : Vector3){
 		//zum Ziel gucken
 		var lookat = moveTo;
 		lookat.y = transform.position.y;
-		transform.LookAt(lookat);
+		//transform.LookAt(lookat);
+		
+		if(!reached.ContainsKey(moveTo))
+			reached.Add(moveTo, 1);
+		else
+			reached[moveTo] = 1;
 	}
 	//bewegung starten
 	move = true;
@@ -285,6 +326,9 @@ function isMoving() {
 
 function OnDrawGizmos(){
 	if (move){
+		var maxExtend = Mathf.Max(gameObject.collider.bounds.extents.x, gameObject.collider.bounds.extents.z);
+		var countReached : int = reached[moveTo];
+		
 		//Ziel als grüne Kugel:
 		Gizmos.color = Color.green;
 		Gizmos.DrawSphere(moveTo, .2);
@@ -298,6 +342,10 @@ function OnDrawGizmos(){
 			}
 			Gizmos.DrawSphere(lastWPPos[i], .1);
 		}
+		
+		Gizmos.color = Color.cyan;
+
+		Gizmos.DrawWireSphere(moveTo, Mathf.Pow((gameObject.collider.bounds.extents.y/2.0+maxExtend*countReached), (7.0/10.0)));
 	}
 }
 

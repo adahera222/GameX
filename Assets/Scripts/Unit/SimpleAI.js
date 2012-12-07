@@ -24,7 +24,7 @@ function Update () {
 		// find next victim
 		Colliders = Physics.OverlapSphere(transform.position, attributes.sightRange, 1);
 		for (var c : Collider in Colliders){
-			if(c.gameObject.tag != gameObject.tag) {
+			if(c.gameObject.tag != gameObject.tag && c.gameObject.tag != "Untagged") {
 				gameObject.SendMessage(mouseControl.attackMethode, c.gameObject, SendMessageOptions.DontRequireReceiver);
 			}
 		}
