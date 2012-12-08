@@ -64,7 +64,6 @@ function OnAttacked(attacker: GameObject) {
 
 function OnMoveTo(goal : Vector3){
 	if (type == AIType.moveAgressive && goal != attack.getSentMoveTo()){
-		Debug.Log("neues Ziel: " + goal);
 		moveTo = goal;
 	}
 }

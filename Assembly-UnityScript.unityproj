@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Unit\SimpleAI.js" />
      <Compile Include="Assets\Scripts\Unit\SimpleHealthbar.js" />
      <Compile Include="Assets\Scripts\Unit\Unit.js" />
+     <Compile Include="Assets\Scripts\Unit\Wandering.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

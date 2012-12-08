@@ -1,9 +1,9 @@
 #pragma strict
 #pragma downcast
-var selectionMethode = "OnSelection";
-var deselectionMethode = "OnDeselection";
-var moveMethode = "OnMoveTo";
-var attackMethode = "OnAttack";
+static var selectionMethode = "OnSelection";
+static var deselectionMethode = "OnDeselection";
+static var moveMethode = "OnMoveTo";
+static var attackMethode = "OnAttack";
 var boxSelectionMinDistance = 10;
 var boxColor = Color.green;
 var multipleSelectTag = "Player";
