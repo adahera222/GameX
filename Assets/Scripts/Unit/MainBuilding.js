@@ -3,6 +3,7 @@
 
 
 var objectsCanCreate : GameObject[];
+var spawn : GameObject;
 
 private var lTime : int;
 private var money : Money;
