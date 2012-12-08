@@ -324,6 +324,10 @@ function isMoving() {
 	return move;
 }
 
+function GetMoveTo() : Vector3{
+	return moveTo;
+}
+
 function OnDrawGizmos(){
 	if (move){
 		var maxExtend = Mathf.Max(gameObject.collider.bounds.extents.x, gameObject.collider.bounds.extents.z);

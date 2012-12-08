@@ -71,6 +71,10 @@ function getTarget() {
 	return target;
 }
 
+function getSentMoveTo() : Vector3 {
+	return sentMoveTo;
+}
+
 function stopAttacking() {
 	target = null;
 	targetAttributes = null;
