@@ -8,6 +8,7 @@ var boxSelectionMinDistance = 10;
 var boxColor = Color.green;
 var multipleSelectTag = "Player";
 var selected : GameObject[];
+var pointer : GameObject;
 private var isDown = false;
 private var startPos : Vector2;
 
@@ -118,6 +119,10 @@ function Action(){
 			var goal : Vector3 = getClickedPoint();
 			for (var go : GameObject in selected){
 				if(go != null)
+					if (pointer){
+					 	var pointer2 : GameObject = Instantiate(pointer, goal, Quaternion.identity);
+					 	GameObject.Destroy(pointer2, 2);
+				 	}
 					go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
 			}
 		}

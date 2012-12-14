@@ -1,17 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Unit\Wandering.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Global\MouseControl.js">
     <Files>
       <File FileName="Assets\Scripts\Unit\SimpleAI.js" Line="26" Column="60" />
       <File FileName="Assets\Scripts\Unit\Unit.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Unit\Moving.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Unit\SimpleHealthbar.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Unit\Attributes.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Global\MouseControl.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Global\RTSCam.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Unit\Attack.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Unit\MainBuilding.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Unit\Wandering.js" Line="25" Column="3" />
+      <File FileName="Assets\Scripts\Global\MouseControl.js" Line="123" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
