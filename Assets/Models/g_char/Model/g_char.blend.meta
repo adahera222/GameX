@@ -4,26 +4,94 @@ ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Armature
+    100004: Bauch
+    100006: Brust
+    100008: Fuss_L
+    100010: Fuss_R
+    100012: Hand_L
+    100014: Hand_R
+    100016: Huefte_L
+    100018: Huefte_R
+    100020: Kopf
+    100022: Nacken
+    100024: Oberarm_L
+    100026: Oberarm_R
+    100028: Oberschenkel_L
+    100030: Oberschenkel_R
+    100032: Plane
+    100034: Schulter_L
+    100036: Schulter_R
+    100038: Unterarm_L
+    100040: Unterarm_R
+    100042: Unterschenkel_L
+    100044: Unterschenkel_R
     400000: //RootNode
+    400002: Armature
+    400004: Bauch
+    400006: Brust
+    400008: Fuss_L
+    400010: Fuss_R
+    400012: Hand_L
+    400014: Hand_R
+    400016: Huefte_L
+    400018: Huefte_R
+    400020: Kopf
+    400022: Nacken
+    400024: Oberarm_L
+    400026: Oberarm_R
+    400028: Oberschenkel_L
+    400030: Oberschenkel_R
+    400032: Plane
+    400034: Schulter_L
+    400036: Schulter_R
+    400038: Unterarm_L
+    400040: Unterarm_R
+    400042: Unterschenkel_L
+    400044: Unterschenkel_R
     2300000: //RootNode
     3300000: //RootNode
     4300000: Plane
     6400000: //RootNode
     7400000: Default Take
+    7400002: Idle
     11100000: //RootNode
+    13700000: Plane
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
-    legacyGenerateAnimations: 3
+    legacyGenerateAnimations: 4
     bakeSimulation: 0
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
-    clipAnimations: []
+    clipAnimations:
+    - name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 99
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      keepAdditionalBonesAnimation: 1
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      skeletonMaskElements: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []

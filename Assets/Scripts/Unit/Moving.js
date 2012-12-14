@@ -8,7 +8,6 @@ private var oldMoveing = false;
 private var speed = 1.0;
 private var move = false;
 private var moveTo : Vector3;
-private var cc : CharacterController;
 private var attributes : Attributes;
 private var lastWPPos : Vector3[] = new Vector3[40];
 private var lastWPRot : Quaternion[] = new Quaternion[40];
@@ -17,7 +16,6 @@ private var disabledTurningTill : float = 0.0;
 
 
 function Start () {
-	cc = gameObject.GetComponent(CharacterController);
 	attributes = gameObject.GetComponent(Attributes);
 	speed = attributes.moveSpeed;
 }
@@ -353,5 +351,4 @@ function OnDrawGizmos(){
 	}
 }
 
-@script RequireComponent(CharacterController)
 @script RequireComponent(Attributes)
