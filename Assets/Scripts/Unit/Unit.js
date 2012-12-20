@@ -7,6 +7,8 @@ private var drawActionBar = false;
 private var sObj : GameObject;
 private var attributes : Attributes;
 private var money : Money;
+private var needToPlace : GameObject = null;
+private var tempPlaced : GameObject = null;
 
 function Start () {
 	actionBar = GameObject.Find("GlobalScripts").GetComponent(ActionBar);
@@ -16,7 +18,16 @@ function Start () {
 }
 
 function Update () {
+	if(needToPlace != null) {
+		var pos : Vector3 = getCurrentPoint();	
+		pos.y += needToPlace.collider.bounds.center.y;
+		tempPlaced.transform.position = pos;
 
+		if(Input.GetMouseButtonDown(0)) {
+			needToPlace = null;
+			tempPlaced = null;
+		}
+	}
 }
 
 function OnGUI() {
@@ -54,13 +65,15 @@ function OnGUI() {
 					if(GUILayout.Button(unitAttributes.unitName)) {
 						if(money.Pay(unitAttributes.cost)) {
 							var pos : Vector3;
-							if (mB.spawn){
-								pos = mB.spawn.transform.position;
+							if (!mB.mustPlace){
+								pos = gameObject.transform.position + mB.spawn;
 								pos.y = gO.collider.bounds.center.y;
+								Instantiate (gO, pos, gO.transform.rotation);
 							}else{
-								pos = Vector3(2, gO.collider.bounds.center.y, 1);
+								pos.y = gO.collider.bounds.center.y;
+								needToPlace = gO;
+								tempPlaced = Instantiate (gO, pos, gO.transform.rotation);						
 							}
-							Instantiate (gO, pos, Quaternion.identity);
 						}
 						else {
 							// TODO show message that not enaught money
@@ -75,6 +88,16 @@ function OnGUI() {
 		}
 	}
 }
+
+function getCurrentPoint() : Vector3{
+	var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+	var hit : RaycastHit;
+	var layerMask = 1 << 8;
+	if(Physics.Raycast(ray, hit, Mathf.Infinity, layerMask)){
+		return hit.point;
+	}
+	return;
+};
 
 function OnSelection(obj : GameObject) {
 	drawActionBar = true;
