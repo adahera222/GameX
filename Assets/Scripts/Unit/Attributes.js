@@ -21,6 +21,7 @@ static var damageFactors : float[] = new Array (
 static var attacktypes = 3;
 static var defensetypes = 3;	 
 
+var spawnHeight : float = 0.0;
 
 var unitName = "Noname";
 var unitType : UnitType;

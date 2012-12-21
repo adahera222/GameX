@@ -22,7 +22,11 @@ function Update () {
 		percent = 1;
 	}
 	var width = healthbarWidth * percent;
-	myHB.guiTexture.pixelInset = Rect(10, 10, width, 5);
+	if (myHB.transform.position.z >= 0){
+		myHB.guiTexture.pixelInset = Rect(10, 10, width, 5);
+	}else{
+		myHB.guiTexture.pixelInset = Rect(10, 10, 0, 5);
+	}
 }
 
 @script RequireComponent(Attributes)

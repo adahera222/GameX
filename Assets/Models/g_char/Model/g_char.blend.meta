@@ -26,6 +26,14 @@ ModelImporter:
     100040: Unterarm_R
     100042: Unterschenkel_L
     100044: Unterschenkel_R
+    100046: Bein_IK_L
+    100048: Bein_IK_R
+    100050: Ellenbogen_IK_L
+    100052: Ellenbogen_IK_R
+    100054: Huefte
+    100056: Knie_IK_L
+    100058: Knie_IK_R
+    100060: Unterschenkel_R_001
     400000: //RootNode
     400002: Armature
     400004: Bauch
@@ -49,11 +57,19 @@ ModelImporter:
     400040: Unterarm_R
     400042: Unterschenkel_L
     400044: Unterschenkel_R
+    400046: Bein_IK_L
+    400048: Bein_IK_R
+    400050: Ellenbogen_IK_L
+    400052: Ellenbogen_IK_R
+    400054: Huefte
+    400056: Knie_IK_L
+    400058: Knie_IK_R
+    400060: Unterschenkel_R_001
     2300000: //RootNode
     3300000: //RootNode
     4300000: Plane
     6400000: //RootNode
-    7400000: Default Take
+    7400000: walk
     7400002: Idle
     11100000: //RootNode
     13700000: Plane
@@ -74,6 +90,28 @@ ModelImporter:
       takeName: Idle
       firstFrame: 0
       lastFrame: 99
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      keepAdditionalBonesAnimation: 1
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      skeletonMaskElements: []
+    - name: walk
+      takeName: walk
+      firstFrame: 0
+      lastFrame: 79
       wrapMode: 2
       orientationOffsetY: 0
       level: 0

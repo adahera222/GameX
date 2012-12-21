@@ -67,10 +67,10 @@ function OnGUI() {
 							var pos : Vector3;
 							if (!mB.mustPlace){
 								pos = gameObject.transform.position + mB.spawn;
-								pos.y = gO.collider.bounds.center.y;
+								pos.y = gO.GetComponent(Attributes).spawnHeight;
 								Instantiate (gO, pos, gO.transform.rotation);
 							}else{
-								pos.y = gO.collider.bounds.center.y;
+								pos.y = gO.GetComponent(Attributes).spawnHeight;
 								needToPlace = gO;
 								tempPlaced = Instantiate (gO, pos, gO.transform.rotation);						
 							}

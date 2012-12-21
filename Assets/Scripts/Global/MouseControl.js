@@ -37,7 +37,7 @@ function Select(){
 		SelectMultiple(startPos, Input.mousePosition);
 	}else{
 		var obj : GameObject = GetClickedGameObject();
-		if (obj != null){
+		if (obj != null && obj.tag == "Player"){
 			if (selected.Length > 0){
 				for (var go : GameObject in selected){
 					if(go != null)
@@ -135,7 +135,7 @@ function getClickedPoint() : Vector3{
 	var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 	var hit : RaycastHit;
 	var layerMask = 1 << 8;
-	if(Physics.Raycast(ray, hit, layerMask)){
+	if(Physics.Raycast(ray, hit, Mathf.Infinity, layerMask)){
 		return hit.point;
 	}
 	return;

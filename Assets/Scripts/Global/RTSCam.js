@@ -4,8 +4,6 @@
 var speed = 1.0;
 var border = 30.0;
 var angle = 40.0;
-var minDistance = 1.0;
-var maxDistance = 10.0;
 var maxAngle = 90.0;
 var minAngle = 10.0;
 var cam : Camera;
@@ -24,15 +22,7 @@ function OnGUI() {
 }
 
 function Start () {
-	cam.transform.eulerAngles.x = angle;
-	
-	var hitInfo : RaycastHit;
-	var layerMask = 1 << 8;
-	var pos = cam.transform.position;
-	Physics.Raycast(Vector3(pos.x, pos.y, pos.z), -Vector3.up, hitInfo, Mathf.Infinity, layerMask);
-
-	actualDistance = Vector2.Distance(pos, hitInfo.point);
-	cam.transform.localEulerAngles.x = CalculateAngle();
+	actualDistance = cam.transform.position.y - getPoint().y;
 }
 
 function Update () {
@@ -46,71 +36,66 @@ function Update () {
 	}
 	//down
 	if (Input.mousePosition.y <= border || Input.GetAxis("ScrollVertical") < 0){
-		move((Vector3.back + Vector3.down).normalized);
+		move((Vector3.back).normalized);
 	}
 	//up
 	if (Input.mousePosition.y >= Screen.height - border || Input.GetAxis("ScrollVertical") > 0){
-		move((Vector3.forward + Vector3.up).normalized);
+		move((Vector3.forward).normalized);
 	}
 	
 	//Zoom
 	if (Input.GetAxis("Mouse ScrollWheel") != 0){
-		Zoom(Input.GetAxis("Mouse ScrollWheel"));
+		Zoom(Input.GetAxis("Mouse ScrollWheel")*speed);
 	}
 	
 	//Rotate
 	if (Input.GetButton("Rotate")){
 		Rotate(Input.GetAxis("Mouse X"));
 	}
-	
-	
-	CorrectDistance();
 }
 
 function move(direction : Vector3){
-	var relative = cam.transform.TransformDirection(direction);
-	var dir = cam.transform.InverseTransformDirection(relative)  * Time.deltaTime * speed;
-	cam.transform.Translate(dir);
+	var quat = Quaternion.AngleAxis(cam.transform.eulerAngles.y, Vector3.up);
+	var dir = quat * direction  * Time.deltaTime * speed;
+	cam.transform.Translate(dir, Space.World);
+	//höhe zum Boden halten... ist noch zu überarbeiten.
+	cam.transform.position.y = getPoint().y + actualDistance;
 }
 
 /*
-* Ändert die Distanz zum Boden und passt den Kamerawinkel entsprechend an.
+* Rotiert die Kamera auf einer Halbkugel nach oben/unten.
 * speed: Die Stärke der Änderung.
 */
 function Zoom(speed : float){	
-	var newDistance = actualDistance - speed;
-	actualDistance = Mathf.Min(Mathf.Max(newDistance, minDistance), maxDistance);
-	cam.transform.localEulerAngles.x = CalculateAngle();
-}
-
-/*
-* Berechnet den richtigen Kamerawinkel für die aktuelle Distanz zum Boden.
-*/
-function CalculateAngle() : float{
-	var steigung = (maxAngle - minAngle)/(maxDistance - minDistance);
-	var nullpunkt = minAngle - minDistance*steigung;
-	
-	return (actualDistance * steigung + nullpunkt);
-}
-
-/*
-* Setzt die Kamerahöhe so, dass die Distanz zum Boden der "actualDistance" entspricht.
-*/
-function CorrectDistance(){
-	var hitInfo : RaycastHit;
-	var layerMask = 1 << 8;
-	var pos = cam.transform.position;
-	
-	if (Physics.Raycast(cam.transform.position, -Vector3.up, hitInfo, Mathf.Infinity, layerMask)){
-		var dist = Vector2.Distance(pos, hitInfo.point);
-		var abstand = actualDistance - dist;
-		cam.transform.position.y += abstand;
-	}else{
-		cam.transform.position.y = actualDistance;
+	if (cam.transform.rotation.eulerAngles.x + speed >= minAngle
+		&& cam.transform.rotation.eulerAngles.x + speed <= maxAngle){
+		cam.transform.RotateAround(getPoint(), cam.transform.right, speed);
+		actualDistance = cam.transform.position.y - getPoint().y;
 	}
 }
 
+/*
+* Rotiert die Kamera auf einer Halbkugel nach links/rechts.
+*/
 function Rotate(speed : float){
-	//TODO: rotation auf Halbkugel
-	cam.transform.localEulerAngles.y += speed;
+	cam.transform.RotateAround(getPoint(), Vector3.up, speed);
+}
+
+/*
+* Gibt den Punkt auf dem Boden der in der Mitte des Bildschirms ist zurück.
+*/
+function getPoint() : Vector3{
+	var middle = Vector2(Screen.width/2, Screen.height/2);
+	var ray = Camera.main.ScreenPointToRay(middle);
+	var hit : RaycastHit;
+	var layerMask = 1 << 8;
+	if(Physics.Raycast(ray, hit, Mathf.Infinity, layerMask)){
+		return hit.point;
+	}
+	return;
+};
+
+function OnDrawGizmosSelected() {
+	Gizmos.color = Color.yellow;
+	Gizmos.DrawSphere(getPoint(), 0.2);
 }

@@ -80,7 +80,9 @@ function Move(){
 				v = reached[moveTo];
 				reached[moveTo] = v+1;			
 			}
-
+			
+			var animation : Animation = GetComponent(Animation);
+			animation.Play("Idle", PlayMode.StopAll);
 			move = false;
 			//return;
 		}
@@ -311,10 +313,15 @@ function OnMoveTo(goal : Vector3){
 			reached[moveTo] = 1;
 	}
 	//bewegung starten
+	var animation : Animation = GetComponent(Animation);
+	animation["walk"].speed = speed + 1;
+	animation.Play("walk", PlayMode.StopAll);
 	move = true;
 }
 
 function OnStopMovement(go : GameObject){
+	var animation : Animation = GetComponent(Animation);
+	animation.Play("Idle", PlayMode.StopAll);
 	move = false;
 }
 
