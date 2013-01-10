@@ -14,15 +14,19 @@ function Start () {
 	moving = gameObject.GetComponent(Moving);
 	attributes = gameObject.GetComponent(Attributes);
 	attack = gameObject.GetComponent(Attack);
+
+	if(area == null) {
+		area = gameObject.Find("Area_All");
+	}
 }
 
 function Update () {
 	if (wanderAround && attack.getTarget() == null && (!moving.isMoving() || Time.time >= nextChange)){
-		var dir : Vector3; 
+		var dir : Vector3;
 		var rot : Quaternion;
 		var moveTo : Vector3;
 		var sightRange : float = attributes.sightRange;
-		
+
 		do{
 			dir = gameObject.transform.forward;
 			rot  = Quaternion.AngleAxis(Random.Range(-maxDirectionChangeDegree, maxDirectionChangeDegree), Vector3.up);
@@ -30,9 +34,9 @@ function Update () {
 			moveTo = transform.position + dir;
 			sightRange -= 0.1;
 		}while(!area.collider.bounds.Contains(moveTo));
-		
+
 		gameObject.SendMessage(MouseControl.moveMethode, moveTo, SendMessageOptions.DontRequireReceiver);
-		
+
 		nextChange = Time.time + directionChangeIntervall;
 	}
 }

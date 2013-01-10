@@ -1,0 +1,114 @@
+fileFormatVersion: 2
+guid: 87221a38cd13a2f48a00bb36d641399e
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: bush_fern_joined
+    100002: ivy
+    100004: leaf_ivy
+    100006: leaf_mapple
+    100008: leaf_oak
+    100010: leaf_poplar
+    100012: lily
+    100014: //RootNode
+    100016: Plane
+    100018: tree_oak_joined
+    100020: tree_pine_joined
+    100022: tree_small_joined
+    400000: bush_fern_joined
+    400002: ivy
+    400004: leaf_ivy
+    400006: leaf_mapple
+    400008: leaf_oak
+    400010: leaf_poplar
+    400012: lily
+    400014: //RootNode
+    400016: Plane
+    400018: tree_oak_joined
+    400020: tree_pine_joined
+    400022: tree_small_joined
+    2300000: bush_fern_joined
+    2300002: ivy
+    2300004: leaf_ivy
+    2300006: leaf_mapple
+    2300008: leaf_oak
+    2300010: leaf_poplar
+    2300012: lily
+    2300014: Plane
+    2300016: tree_oak_joined
+    2300018: tree_pine_joined
+    2300020: tree_small_joined
+    3300000: bush_fern_joined
+    3300002: ivy
+    3300004: leaf_ivy
+    3300006: leaf_mapple
+    3300008: leaf_oak
+    3300010: leaf_poplar
+    3300012: lily
+    3300014: Plane
+    3300016: tree_oak_joined
+    3300018: tree_pine_joined
+    3300020: tree_small_joined
+    4300000: Plane
+    4300002: lily
+    4300004: leaf_mapple
+    4300006: leaf_oak
+    4300008: leaf_ivy
+    4300010: leaf_poplar
+    4300012: bush_fern_joined
+    4300014: tree_small_joined
+    4300016: tree_pine_joined
+    4300018: tree_oak_joined
+    4300020: ivy
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
