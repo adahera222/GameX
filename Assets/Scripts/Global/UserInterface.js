@@ -19,7 +19,7 @@ function Start () {
 function Update () {
 	if(needToPlace != null) {
 		var pos : Vector3 = getCurrentPoint();
-		pos.y += needToPlace.collider.bounds.center.y;
+		pos.y += needToPlace.GetComponent(Attributes).spawnHeight;
 		tempPlaced.transform.position = pos;
 
 		if(Input.GetMouseButtonDown(0)) {
@@ -38,7 +38,7 @@ function getCurrentPoint() : Vector3{
 		return hit.point;
 	}
 	return;
-};
+}
 
 
 

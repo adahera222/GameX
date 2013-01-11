@@ -3,7 +3,6 @@
 
 
 public static var reached : Hashtable = new Hashtable();
-private var oldMoveing = false;
 
 private var speed = 1.0;
 private var move = false;
@@ -21,33 +20,10 @@ function Start () {
 }
 
 function Update () {
-	if (oldMoveing){
-		OldMove();
-	}else{
 		Move();
-	}
-	
-}
-
-function OldMove(){
-	if (move){
-		var dir = (moveTo - transform.position).normalized;
-		dir.y = 0;
-		var pos = (moveTo - transform.position).sqrMagnitude;
-		var lookat = moveTo;
-		lookat.y = transform.position.y;
-		transform.LookAt(lookat);
-		//cc.Move(dir * speed * Time.deltaTime);
-		transform.position+=dir*speed*Time.deltaTime;
-		//if (dir.Equals(Vector3.down)){
-		if(pos < 1.1){
-			move = false;
-		}
-	}
 }
 
 function Move(){
-	//var hit : RaycastHit;
 	if (move){
 	
 		var lookat = moveTo;
@@ -99,54 +75,6 @@ function Move(){
 			Physics.Raycast(transform.position + left, dir, range) || 
 			Physics.Raycast(transform.position - left, dir, range)){
 			//etwas ist im Weg
-		
-/* Ich versteh nicht ganz, wie das hier funktionieren soll. Bist du sicher, dass die i's und j's immer richtig sind?
-	Kommentare wären super ;D
-			// TODO: optimieren: divide and conquer ;)
-			for(var j=0; j<=360; j+=45) {
-				for (var i = j; i<=j+60; i += 2*(3/range)){
-
-					dist1 = TestWay(dir, i, range*(1+i/8), left).distance;
-
-					if ( dist1 < 0) {
-						transform.Rotate(0, i, 0);
-						dir = transform.TransformDirection(Vector3.forward);
-						moveOk = true;
-						break;
-					} else {
-						dist2 = TestWay(dir, -i, range*(1+i/8), left).distance;
-
-						if (dist2 < 0){
-							transform.Rotate(0, -i, 0);
-							dir = transform.TransformDirection(Vector3.forward);
-							moveOk = true;
-							break;
-						} else { // in door
-							if(maxDist < Mathf.Max(dist1, dist2)) {
-
-								maxDist = Mathf.Max(dist1, dist2);
-								
-								if(dist1 > dist2)
-									bestI = i;
-								else
-									bestI = -i;
-							}
-						}
-					}
-				}
-				if(moveOk)
-					break;
-			}
-			
-			if(!moveOk) {
-				transform.Rotate(0, bestI, 0);
-				dir = transform.TransformDirection(Vector3.forward);
-				moveOk = true;
-			}
-*/
-			
-			//Ich hab erstmal wieder das "alte" von mir reingetan
-			//Abwechselnd nach links und rechts "drehen" und gucken, wann der Weg frei ist
 			for (var i = 1; i<=180; i++){
 				dist1 = TestWay(dir, i, range, left).distance;
 				if (dist1 < 0){
@@ -179,24 +107,21 @@ function Move(){
 			//nichts ist im Weg
 			moveOk = true;
 		}
+		
 		if(!moveOk) {
 				transform.Rotate(0, bestI, 0);
 				dir = transform.TransformDirection(Vector3.forward);
 				moveOk = true;
 		}
 		
-		if (moveOk){
-			 Debug.DrawRay(transform.position, dir*range, Color.blue);
-			 Debug.DrawRay(transform.position + left, dir*range, Color.blue);
-			 Debug.DrawRay(transform.position - left, dir*range, Color.blue);
-			
-			//schwerkraft!
-			dir.y -= 9.81;
-			dir.y = 0;
-			//bewegen
-			//cc.Move(dir * speed * Time.deltaTime);
-			transform.position += dir*speed*Time.deltaTime;
-		}
+		Debug.DrawRay(transform.position, dir*range, Color.blue);
+		Debug.DrawRay(transform.position + left, dir*range, Color.blue);
+		Debug.DrawRay(transform.position - left, dir*range, Color.blue);
+		dir.y = 0;
+		//bewegen
+		transform.position += dir*speed*Time.deltaTime;
+		transform.position += Vector3(0, GetYOffset(), 0);
+		
 		
 		//Waypoint setzen, falls man außerhalb des letzen ist.
 	 	if (!gameObject.collider.bounds.Contains(lastWPPos[wp])){
@@ -212,7 +137,7 @@ function Move(){
 	 		if (x != wp && lastWPPos[x] != lastWPPos[wp] &&
 	 			gameObject.collider.bounds.Contains(lastWPPos[x])){
  				
- 				//Das "zum Ziel drehen" für 2 Sekunden ausschalten
+ 				//Das "zum Ziel drehen" für 1,5 Sekunden ausschalten
  				//Die Zeit muss eigentlich abhängig von der Umgebung variable sein
  				//evtl. kann man das auch abhängig davon machen, welchen Waypoint man
  				//berührt hat?
@@ -230,6 +155,15 @@ function Move(){
 	 	}
 		
 	}
+}
+
+function GetYOffset() : float{
+	var hit : RaycastHit;
+    if (Physics.Raycast (transform.position, -Vector3.up, hit)) {
+        var distanceToGround = hit.distance;
+        return attributes.spawnHeight - distanceToGround;
+    }
+	return 0.0;
 }
 
 function TestWay(dir : Vector3, deg : float, range : float, left : Vector3) : RaycastHit{
@@ -277,41 +211,26 @@ function TestWay(dir : Vector3, deg : float, range : float, left : Vector3) : Ra
 	return hitM;
 }
 
-function TestWay1(dir : Vector3, deg : float, range : float, left : Vector3) : boolean{
-	var quat : Quaternion = Quaternion.AngleAxis(deg, Vector3.up);
-	var newDir = quat * dir;
-	
-	if (Physics.Raycast(transform.position, newDir, range) ||
-		Physics.Raycast(transform.position + left, newDir, range) ||
-		Physics.Raycast(transform.position - left, newDir, range)){
-		//etwas ist im Weg
-		return false;
-	}
-	//nichts ist im Weg
-	return true;
-}
-
 function OnMoveTo(goal : Vector3){
 	moveTo = goal;
 	
-	if (!oldMoveing){
-		//alle Waypoints auf die aktuelle Position setzen
-		for (var i = 0; i < lastWPPos.length; i++){
-			lastWPPos[i] = transform.position;
-			lastWPRot[i] = transform.rotation;
-		}
-		//aktuellen Waypoint auf 0 setzen (kann man eigentlich auch lassen, dürfte egal sein)
-		wp = 0;
-		//zum Ziel gucken
-		var lookat = moveTo;
-		lookat.y = transform.position.y;
-		//transform.LookAt(lookat);
-		
-		if(!reached.ContainsKey(moveTo))
-			reached.Add(moveTo, 1);
-		else
-			reached[moveTo] = 1;
+	//alle Waypoints auf die aktuelle Position setzen
+	for (var i = 0; i < lastWPPos.length; i++){
+		lastWPPos[i] = transform.position;
+		lastWPRot[i] = transform.rotation;
 	}
+	//aktuellen Waypoint auf 0 setzen (kann man eigentlich auch lassen, dürfte egal sein)
+	wp = 0;
+	//zum Ziel gucken
+	var lookat = moveTo;
+	lookat.y = transform.position.y;
+	//transform.LookAt(lookat);
+	
+	if(!reached.ContainsKey(moveTo))
+		reached.Add(moveTo, 1);
+	else
+		reached[moveTo] = 1;
+
 	//bewegung starten
 	var animation : Animation = GetComponent(Animation);
 	animation["walk"].speed = speed + 1;

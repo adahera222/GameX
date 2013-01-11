@@ -2,7 +2,7 @@
 
 
 var wanderAround = true;
-var directionChangeIntervall = 5.0;
+var directionChangeIntervall = 20.0;
 var maxDirectionChangeDegree = 90.0;
 var area : GameObject;
 private var moving : Moving;
@@ -17,6 +17,11 @@ function Start () {
 
 	if(area == null) {
 		area = gameObject.Find("Area_All");
+	}
+	
+	var ai : SimpleAI = gameObject.GetComponent(SimpleAI);
+	if (ai){
+		ai.type = AIType.moveAgressive;
 	}
 }
 
