@@ -29,12 +29,22 @@ function Update () {
 			dir = rot * dir * sightRange;
 			moveTo = transform.position + dir;
 			sightRange -= 0.1;
-		}while(!area.collider.bounds.Contains(moveTo));
+		}//while(!area.collider.bounds.Contains(moveTo));
+		while (!IsInside(area.collider, moveTo));
 		
 		gameObject.SendMessage(MouseControl.moveMethode, moveTo, SendMessageOptions.DontRequireReceiver);
 		
 		nextChange = Time.time + directionChangeIntervall;
 	}
+}
+
+function IsInside(collider : Collider, point : Vector3) : boolean{
+	var center : Vector3 = collider.bounds.center;
+	var direction : Vector3 = center - point;
+	var ray : Ray = new Ray(point, direction);
+	var hitinfo : RaycastHit;
+	
+	return !collider.Raycast(ray, hitinfo, direction.magnitude);
 }
 
 
