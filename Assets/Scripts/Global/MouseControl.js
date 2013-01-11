@@ -112,18 +112,20 @@ function Action(){
 	if(obj != null) {
 		if (obj.GetComponent("Unit") != null){
 			for (var go : GameObject in selected){
-				if(go != null)
+				if(go != null){
 					go.SendMessage(attackMethode, obj, SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}else{
 			var goal : Vector3 = getClickedPoint();
 			for (var go : GameObject in selected){
-				if(go != null)
+				if(go != null){
 					if (pointer){
 					 	var pointer2 : GameObject = Instantiate(pointer, goal, Quaternion.identity);
 					 	GameObject.Destroy(pointer2, 2);
 				 	}
 					go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}
 	}

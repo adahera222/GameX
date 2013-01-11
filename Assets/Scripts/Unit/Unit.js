@@ -3,10 +3,12 @@
 
 private var ui : UserInterface;
 private var attributes : Attributes;
+private var projector : Projector;
 
 function Start () {
 	attributes = gameObject.GetComponent(Attributes);
 	ui = GameObject.Find("GlobalScripts").GetComponent(UserInterface);
+	projector = transform.Find("Ring Projector").GetComponent(Projector);
 }
 
 function Update () {
@@ -16,9 +18,11 @@ function Update () {
 
 function OnSelection(obj : GameObject) {
 	ui.visible = true;
+	projector.enabled = true;
 }
 function OnDeselection(obj : GameObject) {
 	ui.visible = false;
+	projector.enabled = false;
 }
 
 function OnDrawGizmos(){
