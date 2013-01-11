@@ -37,18 +37,20 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Programme/Unity/Editor 4.0/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Programme/Unity/Editor 4.0/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Global\DrawBox.js" />
+     <Compile Include="Assets\Scripts\Global\EnemyBehavior.js" />
      <Compile Include="Assets\Scripts\Global\MiniMap.js" />
      <Compile Include="Assets\Scripts\Global\Money.js" />
      <Compile Include="Assets\Scripts\Global\MouseControl.js" />
      <Compile Include="Assets\Scripts\Global\RTSCam.js" />
+     <Compile Include="Assets\Scripts\Global\UserInterface.js" />
      <Compile Include="Assets\Scripts\Styles\ActionBar.js" />
      <Compile Include="Assets\Scripts\Styles\GlobalStats.js" />
      <Compile Include="Assets\Scripts\Styles\UnitStatsBar.js" />
