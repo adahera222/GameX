@@ -3,12 +3,12 @@
 
 enum UnitType { Building, Unit }
 
-enum AttackType {	Explosion = 0, 
+enum AttackType {	Explosion = 0,
 					Gewehr = 1,
 					Panzerbrecher = 2};
 
 enum DefenseType  {	Gebaeude = 0,
-					Schutzweste = 1, 
+					Schutzweste = 1,
 					Panzerung = 2};
 
 static var damageFactors : float[] = new Array (
@@ -19,7 +19,7 @@ static var damageFactors : float[] = new Array (
 ).ToBuiltin(float);
 
 static var attacktypes = 3;
-static var defensetypes = 3;	 
+static var defensetypes = 3;
 
 var spawnHeight : float = 0.0;
 
@@ -40,6 +40,8 @@ var attackspeed = 1.0;
 var attackRange = 1.0;
 var attackType : AttackType;
 
+var animRatio = 1.0;
+
 private var experience = 0;
 
 
@@ -53,7 +55,7 @@ function Damage(dmg : int) : boolean{
 	if (healthbar != null){
 		healthbar.Update();
 	}
-	
+
 	if (hitpoints <= 0){
 		GameObject.Destroy(gameObject);
 		return true;

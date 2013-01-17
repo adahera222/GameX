@@ -44,7 +44,7 @@ function Update () {
 				var def : float = targetAttributes.defense;
 				var damageFactor = attributes.DamageFactor(attributes.attackType, targetAttributes.defenseType);
 				var dmg = Mathf.Max(1, damageFactor * attributes.attack * (1-def/(50+def)));
-				if (targetAttributes.Damage(dmg)){
+				if (targetAttributes.Damage(dmg) && gameObject.tag != "Neutral"){
 					money.Add(targetAttributes.valueOnKill);
 				} else {
 					target.SendMessage(attackedMethod, gameObject, SendMessageOptions.DontRequireReceiver);
@@ -58,7 +58,7 @@ function Update () {
 			var dist = dir.magnitude;
 			var factor = 1 - attributes.attackRange / dist;
 			var moveTo : Vector3 = target.transform.position;
-			
+
 			if (!moveTo.Equals(sentMoveTo)){
 				sentMoveTo = moveTo;
 				gameObject.SendMessage(moveMethode, moveTo, SendMessageOptions.DontRequireReceiver);
