@@ -63,7 +63,7 @@ function OnAttacked(attacker: GameObject) {
 }
 
 function OnMoveTo(goal : Vector3){
-	if (type == AIType.moveAgressive && goal != attack.getSentMoveTo()){
+	if (goal != attack.getSentMoveTo()){
 		moveTo = goal;
 	}
 }

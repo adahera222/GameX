@@ -107,25 +107,33 @@ function OnGUI() {
 		else {
 			GUILayout.BeginArea (Rect(mm.minimapTexture.width+40, Screen.height-65, 480, 60));
 			GUILayout.BeginHorizontal();
-				for(var unit : GameObject in selected){
-					if(unit != null) {
-						var ai : SimpleAI = unit.GetComponent(SimpleAI);
+				var ai : SimpleAI;
 
-						if(GUILayout.Button("Attack&Move", actionBar.moveAttackButton)) {
+				if(GUILayout.Button("Attack&Move", actionBar.moveAttackButton)) 
+					for(var unit : GameObject in selected)
+						if(unit != null) {
+							ai = unit.GetComponent(SimpleAI);
 							ai.type = AIType.moveAgressive;
 						}
-						if(GUILayout.Button("aggressive", actionBar.aggressiveButton)) {
+				if(GUILayout.Button("aggressive", actionBar.aggressiveButton)) 
+					for(var unit : GameObject in selected)
+						if(unit != null) {
+							ai = unit.GetComponent(SimpleAI);
 							ai.type = AIType.aggressive;
 						}
-						if(GUILayout.Button("defensive", actionBar.defensiveButton)) {
+				if(GUILayout.Button("defensive", actionBar.defensiveButton)) 
+					for(var unit : GameObject in selected)
+						if(unit != null) {
+							ai = unit.GetComponent(SimpleAI);
 							ai.type = AIType.defensive;
 						}
-						if(GUILayout.Button("passive", actionBar.passiveButton)) {
+				if(GUILayout.Button("passive", actionBar.passiveButton)) 
+					for(var unit : GameObject in selected)
+						if(unit != null) {
+							ai = unit.GetComponent(SimpleAI);
 							ai.type = AIType.passive;
 						}
-					}
-
-				}
+							
 			GUILayout.EndHorizontal();
 			GUILayout.EndArea();
 		}
