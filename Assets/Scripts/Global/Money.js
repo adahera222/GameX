@@ -35,3 +35,7 @@ function Pay(v : int) : boolean{
 	money += v;
 	return false;
 }
+
+function Payable(v : int) : boolean{
+	return money >= v;
+}

@@ -1,14 +1,16 @@
 #pragma strict
 
-private var base : MainBuilding;
+private var base : Building;
 private var buildNext : int = 0;
 
 function Start () {
-	base = gameObject.GetComponent(MainBuilding);
+	base = gameObject.GetComponent(Building);
+	var startAfter = gameObject.GetComponent(Attributes).buildtime;
+	InvokeRepeating("tryToBuild", startAfter, 1.0);
 }
 
 function Update () {
-	InvokeRepeating("tryToBuild", 5.0, 1.0);
+	
 }
 
 function tryToBuild() {
@@ -17,33 +19,24 @@ function tryToBuild() {
 		var costs = gO.GetComponent(Attributes).cost;
 		var money : Money = GameObject.Find("EnemyScripts").GetComponent(Money);
 
-		if(money.Pay(costs)) {
+		if(money.Payable(costs)) {
 			var created : GameObject;
 			var pos : Vector3;
 			if (!base.mustPlace){
-				pos = base.transform.position + base.spawn;
-				pos.y = gO.GetComponent(Attributes).spawnHeight;
-				created = Instantiate (gO, pos, gO.transform.rotation);
-				created.tag = base.tag;
-				var wandering : Wandering = created.GetComponent(Wandering);
-				if (wandering){
-					wandering.wanderAround = true;
-				}else{
-					created.AddComponent(Wandering);
-				}
-				updateMinimapIcon(created);
-				
+				base.Build(buildNext);
 			}else{
 				pos.x -= Random.Range(5, 10);
 				pos.z -= Random.Range(5, 10);
 
 				pos += base.transform.position;
-				pos.y = gO.GetComponent(Attributes).spawnHeight;
+				
+				base.Build(buildNext, pos);
+				//pos.y = gO.GetComponent(Attributes).spawnHeight;
 
-				created = Instantiate (gO, pos, gO.transform.rotation);
-				created.tag = base.tag;
-				created.AddComponent(EnemyBehavior);
-				updateMinimapIcon(created);
+				//created = Instantiate (gO, pos, gO.transform.rotation);
+				//created.tag = base.tag;
+				//created.AddComponent(EnemyBehavior);
+				//updateMinimapIcon(created);
 			}
 
 			buildNext++;

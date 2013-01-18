@@ -1,11 +1,7 @@
 #pragma strict
 #pragma downcast
-
-
-var objectsCanCreate : GameObject[];
-var mustPlace : boolean;
-var spawn : Vector3;
-
+var amount = 1;
+var time = 2;
 private var lTime : int;
 private var money : Money;
 
@@ -17,8 +13,8 @@ function Start ()
 
 function Update ()
 {
-	if(lTime+2 <= Time.time) {
-		lTime = Time.time;
-		money.Add(1);
+	if(lTime+time <= Time.time) {
+		lTime += time;
+		money.Add(amount);
 	}
 }

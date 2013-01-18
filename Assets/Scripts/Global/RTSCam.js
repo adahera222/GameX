@@ -7,6 +7,7 @@ var angle = 40.0;
 var maxAngle = 90.0;
 var minAngle = 10.0;
 var cam : Camera;
+var area : GameObject;
 private var actualDistance : float;
 
 
@@ -15,6 +16,10 @@ function OnGUI() {
 	var money : Money = GameObject.Find("PlayerScripts").GetComponent("Money");
 	var globalBar : GlobalStats = GameObject.Find("GlobalScripts").GetComponent("GlobalStats");
 	var today = System.DateTime.Now;
+	
+	if(area == null) {
+		area = gameObject.Find("Area_All");
+	}
 	
 	GUI.Box(Rect(Screen.width - globalBar.style.fixedWidth - 80, 0, 0, 0), "", globalBar.style);
 	GUI.Label(Rect(Screen.width-485, 8, 160, 20), "GELD: "+money.Get(), globalBar.textStyle);
@@ -60,6 +65,11 @@ function move(direction : Vector3){
 	cam.transform.Translate(dir, Space.World);
 	//höhe zum Boden halten... ist noch zu überarbeiten.
 	cam.transform.position.y = getPoint().y + actualDistance;
+	
+	
+	if (!IsInside(area.collider, getPoint())){
+		move(-1*direction);
+	}
 }
 
 /*
@@ -98,4 +108,13 @@ function getPoint() : Vector3{
 function OnDrawGizmosSelected() {
 	Gizmos.color = Color.yellow;
 	Gizmos.DrawSphere(getPoint(), 0.2);
+}
+
+function IsInside(collider : Collider, point : Vector3) : boolean{
+	var center : Vector3 = collider.bounds.center;
+	var direction : Vector3 = center - point;
+	var ray : Ray = new Ray(point, direction);
+	var hitinfo : RaycastHit;
+	
+	return !collider.Raycast(ray, hitinfo, direction.magnitude);
 }

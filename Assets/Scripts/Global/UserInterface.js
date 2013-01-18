@@ -72,32 +72,36 @@ function OnGUI() {
 
 			// draw building actions
 
-			var mB : MainBuilding = selected[0].GetComponent(MainBuilding);
+			var mB : Building = selected[0].GetComponent(Building);
 
 			GUILayout.BeginArea (Rect(mm.minimapTexture.width+40, Screen.height-50, 480, 40));
 			GUILayout.BeginHorizontal();
 
 			if(mB != null) {
-				for(var gO : GameObject in mB.objectsCanCreate) {
+				for(var i = 0; i<mB.objectsCanCreate.Length; i++) {
+					var gO : GameObject = mB.objectsCanCreate[i];
 					var unitAttributes : Attributes = gO.GetComponent(Attributes);
-					if(GUILayout.Button(unitAttributes.unitName)) {
-						if(money.Pay(unitAttributes.cost)) {
-							var pos : Vector3;
-							if (!mB.mustPlace){
-								pos = selected[0].transform.position + mB.spawn;
-								pos.y = gO.GetComponent(Attributes).spawnHeight;
-								Instantiate (gO, pos, gO.transform.rotation);
-							}else{
-								pos.y = gO.GetComponent(Attributes).spawnHeight;
-								needToPlace = gO;
-								tempPlaced = Instantiate (gO, pos, gO.transform.rotation);
-							}
-						}
-						else {
-							// TODO show message that not enaught money
-							Debug.Log("TODO: Not enaugh money");
+					GUILayout.BeginVertical();
+					
+					var rect : Rect = GUILayoutUtility.GetRect(10,5,GUILayout.ExpandWidth(true));
+					var tex = new Texture2D(100, 1);
+					var cols = tex.GetPixels();
+					for (var x = 0; x<cols.Length; x++){
+						cols[x] = Color.clear;
+					}
+					if (mB.objectsCooldownPercent[i] != 0){
+						for (x = 0; x<100-mB.objectsCooldownPercent[i]; x++){
+							cols[x] = Color.red;
 						}
 					}
+					tex.SetPixels(cols);
+					tex.Apply();
+					
+					GUI.DrawTexture(rect, tex);
+					if(GUILayout.Button(unitAttributes.unitName)) {
+						mB.Build(i);
+					}
+					GUILayout.EndVertical();
 				}
 			}
 
