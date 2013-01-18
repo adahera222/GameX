@@ -29,4 +29,8 @@ function Update () {
 	}
 }
 
+function OnDeath(){
+	Destroy(this);
+}
+
 @script RequireComponent(Attributes)

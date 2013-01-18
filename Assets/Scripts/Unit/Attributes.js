@@ -57,7 +57,8 @@ function Damage(dmg : int) : boolean{
 	}
 
 	if (hitpoints <= 0){
-		GameObject.Destroy(gameObject);
+		//GameObject.Destroy(gameObject);
+		gameObject.SendMessage("OnDeath", null, SendMessageOptions.DontRequireReceiver);
 		return true;
 	}
 	return (false);

@@ -32,5 +32,11 @@ function OnDrawGizmos(){
 	}
 }
 
+function OnDeath(){
+	OnDeselection(null);
+	tag = "Untagged";
+	Destroy(this);
+}
+
 
 @script RequireComponent(Attributes)

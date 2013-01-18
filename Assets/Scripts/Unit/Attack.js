@@ -46,6 +46,7 @@ function Update () {
 				var dmg = Mathf.Max(1, damageFactor * attributes.attack * (1-def/(50+def)));
 				if (targetAttributes.Damage(dmg) && gameObject.tag != "Neutral"){
 					money.Add(targetAttributes.valueOnKill);
+					target = null;
 				} else {
 					target.SendMessage(attackedMethod, gameObject, SendMessageOptions.DontRequireReceiver);
 				}
@@ -100,6 +101,12 @@ function OnDrawGizmos(){
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position, attributes.attackRange);
 	}
+}
+
+function OnDeath(){
+	if (GetComponent(SimpleAI))
+		Destroy(GetComponent(SimpleAI));
+	Destroy(this);
 }
 
 

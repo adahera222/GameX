@@ -279,4 +279,14 @@ function OnDrawGizmos(){
 	}
 }
 
+function OnDeath(){
+	var animation : Animation = GetComponent(Animation);
+	animation.Stop();
+	transform.localRotation.eulerAngles.x = 270;
+	transform.position.y -= (attributes.spawnHeight - 0.1);
+	if (GetComponent(Wandering))
+		Destroy(GetComponent(Wandering));
+	Destroy(this);
+}
+
 @script RequireComponent(Attributes)

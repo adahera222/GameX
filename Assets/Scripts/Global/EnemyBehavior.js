@@ -53,3 +53,9 @@ function updateMinimapIcon (go : GameObject){
 	var parentIcon : Transform = transform.Find("minimapIcon");
 	minimapIcon.renderer.material = parentIcon.renderer.material;
 }
+
+function OnDeath(){
+	Destroy(this);
+}
+
+@script RequireComponent(Attributes)

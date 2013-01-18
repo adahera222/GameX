@@ -56,7 +56,9 @@ function IsInside(collider : Collider, point : Vector3) : boolean{
 	return !collider.Raycast(ray, hitinfo, direction.magnitude);
 }
 
-
+function OnDeath(){
+	Destroy(this);
+}
 
 @script RequireComponent(Moving)
 @script RequireComponent(Attributes)

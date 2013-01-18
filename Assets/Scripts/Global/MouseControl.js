@@ -5,6 +5,8 @@ static var deselectionMethode = "OnDeselection";
 static var moveMethode = "OnMoveTo";
 static var attackMethode = "OnAttack";
 var boxSelectionMinDistance = 10;
+var walkableTerrainX = 50;
+var walkableTerrainZ = 50;
 var boxColor = Color.green;
 var multipleSelectTag = "Player";
 var selected : GameObject[];
@@ -138,7 +140,10 @@ function getClickedPoint() : Vector3{
 	var hit : RaycastHit;
 	var layerMask = 1 << 8;
 	if(Physics.Raycast(ray, hit, Mathf.Infinity, layerMask)){
-		return hit.point;
+		var point = hit.point;
+		point.x = Mathf.Min(walkableTerrainX, Mathf.Max(0, point.x));
+		point.z = Mathf.Min(walkableTerrainZ, Mathf.Max(0, point.z));
+		return point;
 	}
 	return;
 };

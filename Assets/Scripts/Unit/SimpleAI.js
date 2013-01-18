@@ -68,5 +68,9 @@ function OnMoveTo(goal : Vector3){
 	}
 }
 
+function OnDeath(){
+	Destroy(this);
+}
+
 @script RequireComponent(Attributes)
 @script RequireComponent(Attack)

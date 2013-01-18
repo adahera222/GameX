@@ -151,3 +151,7 @@ function getCurrentPoint() : Vector3{
 	}
 	return;
 }
+
+function OnDeath(){
+	Destroy(gameObject);
+}
