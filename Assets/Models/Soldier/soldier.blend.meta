@@ -92,6 +92,9 @@ ModelImporter:
     100172: Spine
     100174: Spine1
     100176: Spine2
+    100178: Armature_002
+    100180: Bone
+    100182: Hips_001
     400000: Armature
     400002: Armature_001
     400004: c_L_eye
@@ -181,6 +184,9 @@ ModelImporter:
     400172: Spine
     400174: Spine1
     400176: Spine2
+    400178: Armature_002
+    400180: Bone
+    400182: Hips_001
     2300000: Circle_003
     2300002: Colt
     2300004: Plane_003
@@ -214,8 +220,11 @@ ModelImporter:
     7400000: Idle
     7400002: walk
     7400004: walk
-    7400006: idle
+    7400006: Idle
     7400008: Idle
+    7400010: die
+    7400012: die
+    7400014: die
     9500000: //RootNode
     11100000: //RootNode
     13700000: c_L_eye
@@ -225,6 +234,7 @@ ModelImporter:
     13700008: c_TeethDown
     13700010: c_TeethUp
     13700012: H_DDS_CrowdRes
+    13700014: Colt
   materials:
     importMaterials: 1
     materialName: 0
@@ -239,7 +249,7 @@ ModelImporter:
     animationWrapMode: 2
     clipAnimations:
     - name: walk
-      takeName: Armature_001Action
+      takeName: walk
       firstFrame: 0
       lastFrame: 10
       wrapMode: 2
@@ -261,10 +271,32 @@ ModelImporter:
       curves: []
       skeletonMaskElements: []
     - name: Idle
-      takeName: Default Take
+      takeName: walk
       firstFrame: 0
       lastFrame: 10
       wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      keepAdditionalBonesAnimation: 1
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      skeletonMaskElements: []
+    - name: die
+      takeName: Die
+      firstFrame: 0
+      lastFrame: 6
+      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0

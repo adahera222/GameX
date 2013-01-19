@@ -82,7 +82,7 @@ function OnGUI() {
 					var gO : GameObject = mB.objectsCanCreate[i];
 					var unitAttributes : Attributes = gO.GetComponent(Attributes);
 					GUILayout.BeginVertical();
-					
+					//---Textur für den Balken zeichnen
 					var rect : Rect = GUILayoutUtility.GetRect(10,5,GUILayout.ExpandWidth(true));
 					var tex = new Texture2D(100, 1);
 					var cols = tex.GetPixels();
@@ -97,8 +97,15 @@ function OnGUI() {
 					tex.SetPixels(cols);
 					tex.Apply();
 					
+					//Balken zeichnen
 					GUI.DrawTexture(rect, tex);
-					if(GUILayout.Button(unitAttributes.unitName)) {
+					
+					
+					var text = unitAttributes.unitName;
+					if (mB.objectsQueue[i] > 0){
+						text += " ("+mB.objectsQueue[i]+")";
+					}
+					if(GUILayout.Button(text)) {
 						mB.Build(i);
 					}
 					GUILayout.EndVertical();
@@ -117,25 +124,29 @@ function OnGUI() {
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							ai.type = AIType.moveAgressive;
+							if (ai != null)
+								ai.type = AIType.moveAgressive;
 						}
 				if(GUILayout.Button("aggressive", actionBar.aggressiveButton)) 
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							ai.type = AIType.aggressive;
+							if (ai != null)
+								ai.type = AIType.aggressive;
 						}
 				if(GUILayout.Button("defensive", actionBar.defensiveButton)) 
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							ai.type = AIType.defensive;
+							if (ai != null)
+								ai.type = AIType.defensive;
 						}
 				if(GUILayout.Button("passive", actionBar.passiveButton)) 
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							ai.type = AIType.passive;
+							if (ai != null)
+								ai.type = AIType.passive;
 						}
 							
 			GUILayout.EndHorizontal();

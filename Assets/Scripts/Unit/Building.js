@@ -4,6 +4,7 @@
 
 var objectsCanCreate : GameObject[];
 var objectsCooldownPercent : int[];
+var objectsQueue: int[];
 var mustPlace : boolean;
 var spawn : GameObject;
 
@@ -17,6 +18,8 @@ private var money : Money;
 function Start ()
 {
 	objectsCooldownPercent = new int[objectsCanCreate.Length];
+	objectsQueue = new int[objectsCanCreate.Length];
+	InvokeRepeating("CheckQueue", 0, 0.1);
 }
 
 function Update ()
@@ -34,6 +37,15 @@ function Update ()
 		if (Input.GetButtonUp("Action")){
 			needToPlace = false;
 			Destroy(tempPlaced);
+		}
+	}
+}
+
+function CheckQueue(){
+	for (var i = 0; i < objectsQueue.Length; i++){
+		if (objectsQueue[i] > 0){
+			objectsQueue[i]--;
+			Build(i);
 		}
 	}
 }
@@ -72,8 +84,12 @@ function Build(index : int){
 				if (gameObject.tag == "Enemy"){
 					unit.AddComponent(Wandering);
 				}
+			}else{
+				objectsQueue[index]++;
 			}
 		}
+	}else if (!mustPlace){
+		objectsQueue[index]++;
 	}
 }
 
