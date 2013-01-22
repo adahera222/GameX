@@ -7,6 +7,7 @@ private var attributes : Attributes;
 private var selected : GameObject[];
 private var needToPlace : GameObject = null;
 private var tempPlaced : GameObject = null;
+private var tempNormal : GUIStyleState = null;
 
 public  var visible = false;
 
@@ -14,6 +15,11 @@ function Start () {
 	actionBar = GameObject.Find("GlobalScripts").GetComponent(ActionBar);
 	statsBar = GameObject.Find("GlobalScripts").GetComponent(UnitStatsBar);
 	money = GameObject.Find("PlayerScripts").GetComponent(Money);
+
+	actionBar.moveAttackButton.onNormal = actionBar.moveAttackButton.normal;
+	actionBar.aggressiveButton.onNormal = actionBar.aggressiveButton.normal;
+	actionBar.defensiveButton.onNormal = actionBar.defensiveButton.normal;
+	actionBar.passiveButton.onNormal = actionBar.passiveButton.normal;
 }
 
 function Update () {
@@ -96,11 +102,11 @@ function OnGUI() {
 					}
 					tex.SetPixels(cols);
 					tex.Apply();
-					
+
 					//Balken zeichnen
 					GUI.DrawTexture(rect, tex);
-					
-					
+
+
 					var text = unitAttributes.unitName;
 					if (mB.objectsQueue[i] > 0){
 						text += " ("+mB.objectsQueue[i]+")";
@@ -118,37 +124,57 @@ function OnGUI() {
 		else {
 			GUILayout.BeginArea (Rect(mm.minimapTexture.width+40, Screen.height-65, 480, 60));
 			GUILayout.BeginHorizontal();
-				var ai : SimpleAI;
+				var ai : SimpleAI = selected[selected.Length-1].GetComponent(SimpleAI);
 
-				if(GUILayout.Button("Attack&Move", actionBar.moveAttackButton)) 
+				actionBar.moveAttackButton.normal = actionBar.moveAttackButton.onNormal;
+				actionBar.aggressiveButton.normal = actionBar.aggressiveButton.onNormal;
+				actionBar.defensiveButton.normal = actionBar.defensiveButton.onNormal;
+				actionBar.passiveButton.normal = actionBar.passiveButton.onNormal;
+
+				if(ai.type == AIType.moveAgressive)
+					actionBar.moveAttackButton.normal = actionBar.moveAttackButton.hover;
+				if(ai.type == AIType.aggressive)
+					actionBar.aggressiveButton.normal = actionBar.aggressiveButton.hover;
+
+				if(ai.type == AIType.defensive)
+					actionBar.defensiveButton.normal = actionBar.defensiveButton.hover;
+
+				if(ai.type == AIType.passive)
+					actionBar.passiveButton.normal = actionBar.passiveButton.hover;
+
+				if(GUILayout.Button("Attack&Move", actionBar.moveAttackButton))
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							if (ai != null)
+							if (ai != null) {
 								ai.type = AIType.moveAgressive;
+							}
 						}
-				if(GUILayout.Button("aggressive", actionBar.aggressiveButton)) 
+				if(GUILayout.Button("aggressive", actionBar.aggressiveButton))
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							if (ai != null)
+							if (ai != null) {
 								ai.type = AIType.aggressive;
+							}
 						}
-				if(GUILayout.Button("defensive", actionBar.defensiveButton)) 
+				if(GUILayout.Button("defensive", actionBar.defensiveButton))
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							if (ai != null)
+							if (ai != null) {
 								ai.type = AIType.defensive;
+							}
 						}
-				if(GUILayout.Button("passive", actionBar.passiveButton)) 
+				if(GUILayout.Button("passive", actionBar.passiveButton))
 					for(var unit : GameObject in selected)
 						if(unit != null) {
 							ai = unit.GetComponent(SimpleAI);
-							if (ai != null)
+							if (ai != null) {
 								ai.type = AIType.passive;
+							}
 						}
-							
+
 			GUILayout.EndHorizontal();
 			GUILayout.EndArea();
 		}

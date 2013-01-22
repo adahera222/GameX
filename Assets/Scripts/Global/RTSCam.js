@@ -16,11 +16,7 @@ function OnGUI() {
 	var money : Money = GameObject.Find("PlayerScripts").GetComponent("Money");
 	var globalBar : GlobalStats = GameObject.Find("GlobalScripts").GetComponent("GlobalStats");
 	var today = System.DateTime.Now;
-	
-	if(area == null) {
-		area = gameObject.Find("Area_All");
-	}
-	
+
 	GUI.Box(Rect(Screen.width - globalBar.style.fixedWidth - 80, 0, 0, 0), "", globalBar.style);
 	GUI.Label(Rect(Screen.width-485, 8, 160, 20), "GELD: "+money.Get(), globalBar.textStyle);
 	GUI.Label(Rect(Screen.width-295, 8, 160, 20), "ZEIT: "+today.ToString("HH:mm:ss"), globalBar.textStyle);
@@ -28,6 +24,9 @@ function OnGUI() {
 
 function Start () {
 	actualDistance = cam.transform.position.y - getPoint().y;
+	if(area == null) {
+		area = gameObject.Find("Area_All");
+	}
 }
 
 function Update () {
@@ -47,12 +46,12 @@ function Update () {
 	if (Input.mousePosition.y >= Screen.height - border || Input.GetAxis("ScrollVertical") > 0){
 		move((Vector3.forward).normalized);
 	}
-	
+
 	//Zoom
 	if (Input.GetAxis("Mouse ScrollWheel") != 0){
 		Zoom(Input.GetAxis("Mouse ScrollWheel")*speed);
 	}
-	
+
 	//Rotate
 	if (Input.GetButton("Rotate")){
 		Rotate(Input.GetAxis("Mouse X"));
@@ -65,8 +64,8 @@ function move(direction : Vector3){
 	cam.transform.Translate(dir, Space.World);
 	//höhe zum Boden halten... ist noch zu überarbeiten.
 	cam.transform.position.y = getPoint().y + actualDistance;
-	
-	
+
+
 	if (!IsInside(area.collider, getPoint())){
 		move(-1*direction);
 	}
@@ -76,7 +75,7 @@ function move(direction : Vector3){
 * Rotiert die Kamera auf einer Halbkugel nach oben/unten.
 * speed: Die Stärke der Änderung.
 */
-function Zoom(speed : float){	
+function Zoom(speed : float){
 	if (cam.transform.rotation.eulerAngles.x + speed >= minAngle
 		&& cam.transform.rotation.eulerAngles.x + speed <= maxAngle){
 		cam.transform.RotateAround(getPoint(), cam.transform.right, speed);
@@ -115,6 +114,6 @@ function IsInside(collider : Collider, point : Vector3) : boolean{
 	var direction : Vector3 = center - point;
 	var ray : Ray = new Ray(point, direction);
 	var hitinfo : RaycastHit;
-	
+
 	return !collider.Raycast(ray, hitinfo, direction.magnitude);
 }
