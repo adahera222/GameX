@@ -44,10 +44,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Keyboard.js" />
      <Compile Include="Assets\Scripts\Global\DrawBox.js" />
      <Compile Include="Assets\Scripts\Global\EnemyBehavior.js" />
      <Compile Include="Assets\Scripts\Global\GlobalPrefabs.js" />
+     <Compile Include="Assets\Scripts\Global\Keyboard.js" />
      <Compile Include="Assets\Scripts\Global\MiniMap.js" />
      <Compile Include="Assets\Scripts\Global\Money.js" />
      <Compile Include="Assets\Scripts\Global\MouseControl.js" />

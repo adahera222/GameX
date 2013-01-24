@@ -13,9 +13,12 @@ private var lastWPPos : Vector3[] = new Vector3[40];
 private var lastWPRot : Quaternion[] = new Quaternion[40];
 private var wp = 0;
 private var disabledTurningTill : float = 0.0;
+private var mouseControl : MouseControl;
+
 
 
 function Start () {
+	mouseControl = GameObject.Find("GlobalScripts").GetComponent(MouseControl);
 	attributes = gameObject.GetComponent(Attributes);
 	speed = attributes.moveSpeed;
 	animRatio = attributes.animRatio;
@@ -26,7 +29,9 @@ function Update () {
 }
 
 function Move(){
-	if (move){
+	var formation = mouseControl.formation == '';
+
+	if (move && (formation || (!formation && mouseControl.selected.length && mouseControl.selected[0] == gameObject))){
 
 		var lookat = moveTo;
 		lookat.y = transform.position.y;
@@ -123,6 +128,32 @@ function Move(){
 		//bewegen
 		transform.position += dir*speed*Time.deltaTime;
 		transform.position += Vector3(0, GetYOffset(), 0);
+
+		// moving in formation
+		if(mouseControl.formation != '') {
+			if(mouseControl.formation == 'square') {
+				var cNum = 0;
+				var count = mouseControl.selected.length;
+				for (var go : GameObject in mouseControl.selected){
+					if(cNum == 0) {
+						cNum++;
+						continue;
+					}
+					else if(go != null) {
+						go.transform.position += dir*speed*Time.deltaTime;
+						go.transform.position += Vector3(0, go.GetComponent(Moving).GetYOffset(), 0);
+						go.transform.rotation = transform.rotation;
+
+						cNum++;
+					} else {
+						count--;
+					}
+				}
+			}
+			else {
+				Debug.Log("Formation '"+mouseControl.formation+"' not implemented!");
+			}
+		}
 
 
 		//Waypoint setzen, falls man außerhalb des letzen ist.

@@ -42,4 +42,16 @@ function Update () {
 					ai.type = AIType.passive;
 			}
 	}
+	else if(Input.GetKeyDown(KeyCode.C)){
+		// circle formation
+		GameObject.Find("GlobalScripts").GetComponent(MouseControl).formation = 'circle';
+	}
+	else if(Input.GetKeyDown(KeyCode.V)){
+		// square formation
+		GameObject.Find("GlobalScripts").GetComponent(MouseControl).formation = 'square';
+	}
+	else if(Input.GetKeyDown(KeyCode.N)){
+		// reset formation
+		GameObject.Find("GlobalScripts").GetComponent(MouseControl).formation = '';
+	}
 }

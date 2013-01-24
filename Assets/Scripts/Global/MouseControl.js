@@ -10,6 +10,7 @@ var walkableTerrainZ = 50;
 var boxColor = Color.green;
 var multipleSelectTag = "Player";
 var selected : GameObject[];
+var formation = '';
 var pointer : GameObject;
 private var isDown = false;
 private var startPos : Vector2;
@@ -83,11 +84,11 @@ function GetClickedGameObject() : GameObject{
 function SelectMultiple(start : Vector2, end : Vector2){
 	var gos : GameObject[];
 	gos = GameObject.FindGameObjectsWithTag(multipleSelectTag);
-	
+
 	//Box, die gezogen wurde
 	var box : Rect;
 	box = Rect (Mathf.Min(start.x, end.x), Mathf.Min(start.y, end.y), Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
-	
+
 	//Alle vorher ausgewählten Einheiten abwählen
 	if (selected.Length > 0){
 		for (var go : GameObject in selected){
@@ -124,7 +125,7 @@ function Action(){
 				if(go != null){
 					if (pointer){
 					 	var pointer2 : GameObject = Instantiate(pointer, goal, Quaternion.identity);
-					 	GameObject.Destroy(pointer2, 2);
+					 	GameObject.Destroy(pointer2, 1);
 				 	}
 					go.SendMessage(moveMethode, goal, SendMessageOptions.DontRequireReceiver);
 				}
