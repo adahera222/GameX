@@ -66,6 +66,10 @@ function Build(index : int){
 		if (mustPlace){
 			needToPlace = true;
 			tempPlaced = Instantiate(go, pos, go.transform.rotation);
+			var health = tempPlaced.GetComponent(SimpleHealthbar);
+			if (health){
+				health.Hide();
+			}
 			tempIndex = index;
 			firstClick = true;
 		}else{
@@ -108,6 +112,10 @@ function Build(index : int, pos : Vector3){
 		var unitAttributes : Attributes = go.GetComponent(Attributes);
 	
 		tempPlaced = Instantiate(go, pos, go.transform.rotation);
+		var health = tempPlaced.GetComponent(SimpleHealthbar);
+		if (health){
+			health.Hide();
+		}
 		pos.y = tempPlaced.GetComponent(Attributes).spawnHeight;
 		tempPlaced.transform.position = pos;
 		tempPlaced.AddComponent(EnemyBehavior);
@@ -144,17 +152,30 @@ function PlaceBuilding(index : int){
 		objectsCooldownPercent[index] = 0;
 		building.transform.position = pos;
 		building.tag = gameObject.tag;
+		var health = building.GetComponent(SimpleHealthbar);
+		if (health){
+			health.Show();
+		}
 	}
 }
 
 
 
 function updateMinimapIconAndTag (go : GameObject){
+	//Minimap Icon
 	var minimapIcon : Transform = go.transform.Find("minimapIcon");
 	var parentIcon : Transform = transform.Find("minimapIcon");
 	minimapIcon.renderer.material = parentIcon.renderer.material;
 	
+	//Tag
 	go.tag = gameObject.tag;
+	
+	//Healthbarfarbe
+	var healthbar : SimpleHealthbar = go.GetComponent(SimpleHealthbar);
+	if (healthbar != null){
+		var myHealthColor = GetComponent(SimpleHealthbar).color;
+		healthbar.SetColor(myHealthColor);
+	}
 }
 
 

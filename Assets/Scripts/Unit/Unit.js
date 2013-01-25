@@ -61,6 +61,11 @@ function SetLayerRecursively(obj : GameObject, newLayer) {
 function OnDeath(){
 	OnDeselection(null);
 	tag = "Untagged";
+	var minimapIcon : Transform = gameObject.transform.Find("minimapIcon");
+	if (minimapIcon){
+		minimapIcon.renderer.enabled = false;
+	} 
+	collider.enabled = false;
 	Destroy(this);
 }
 

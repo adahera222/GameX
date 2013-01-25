@@ -44,8 +44,10 @@ function Update () {
 				var def : float = targetAttributes.defense;
 				var damageFactor = attributes.DamageFactor(attributes.attackType, targetAttributes.defenseType);
 				var dmg = Mathf.Max(1, damageFactor * attributes.attack * (1-def/(50+def)));
-				if (targetAttributes.Damage(dmg) && gameObject.tag != "Neutral"){
-					money.Add(targetAttributes.valueOnKill);
+				if (targetAttributes.Damage(dmg)){
+					if (gameObject.tag != "Neutral"){
+						money.Add(targetAttributes.valueOnKill);
+					}
 					target = null;
 				} else {
 					target.SendMessage(attackedMethod, gameObject, SendMessageOptions.DontRequireReceiver);
@@ -91,6 +93,10 @@ function OnAttack(obj : GameObject){
 	if (gameObject.tag != obj.tag){
 		targetAttributes = obj.GetComponent(Attributes);
 		target = obj;
+		var sword = Instantiate(GameObject.Find("GlobalScripts").GetComponent(GlobalPrefabs).sword, Vector3.zero, Quaternion.Euler(270, 0, 0));
+		sword.transform.parent = target.transform;
+		sword.transform.localPosition = Vector3.up;
+		Destroy(sword, 1);
 	}else{
 		obj = null;
 	}
