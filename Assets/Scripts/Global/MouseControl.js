@@ -116,6 +116,10 @@ function Action(){
 		if (obj.GetComponent("Unit") != null){
 			for (var go : GameObject in selected){
 				if(go != null){
+					var sword = Instantiate(GameObject.Find("GlobalScripts").GetComponent(GlobalPrefabs).sword, Vector3.zero, Quaternion.Euler(270, 0, 0));
+					sword.transform.parent = obj.transform;
+					sword.transform.localPosition = Vector3.up;
+					Destroy(sword, 1);
 					go.SendMessage(attackMethode, obj, SendMessageOptions.DontRequireReceiver);
 				}
 			}

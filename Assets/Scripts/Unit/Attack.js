@@ -46,6 +46,9 @@ function Update () {
 				var dmg = Mathf.Max(1, damageFactor * attributes.attack * (1-def/(50+def)));
 				if (targetAttributes.Damage(dmg)){
 					if (gameObject.tag != "Neutral"){
+						if (!money){
+							Start();
+						}
 						money.Add(targetAttributes.valueOnKill);
 					}
 					target = null;
@@ -93,10 +96,6 @@ function OnAttack(obj : GameObject){
 	if (gameObject.tag != obj.tag){
 		targetAttributes = obj.GetComponent(Attributes);
 		target = obj;
-		var sword = Instantiate(GameObject.Find("GlobalScripts").GetComponent(GlobalPrefabs).sword, Vector3.zero, Quaternion.Euler(270, 0, 0));
-		sword.transform.parent = target.transform;
-		sword.transform.localPosition = Vector3.up;
-		Destroy(sword, 1);
 	}else{
 		obj = null;
 	}
