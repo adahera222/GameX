@@ -8,13 +8,21 @@ private var money : Money;
 function Start ()
 {
 	lTime=Time.time;
-	money = GameObject.Find("PlayerScripts").GetComponent(Money);
+	if (gameObject.tag == "Player"){
+		money = GameObject.Find("PlayerScripts").GetComponent(Money);
+	} else if(gameObject.tag == "Enemy") {
+		money = GameObject.Find("EnemyScripts").GetComponent(Money);
+	}
 }
 
 function Update ()
 {
 	if(lTime+time <= Time.time) {
 		lTime += time;
-		money.Add(amount);
+		if (money != null){
+			money.Add(amount);
+		}else{
+			Start();
+		}
 	}
 }
