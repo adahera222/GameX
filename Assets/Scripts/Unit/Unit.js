@@ -1,6 +1,9 @@
 #pragma strict
 #pragma downcast
 
+var confirm : AudioClip;
+var dying: AudioClip;
+
 private var ui : UserInterface;
 private var attributes : Attributes;
 private var projector : Projector;
@@ -59,14 +62,22 @@ function SetLayerRecursively(obj : GameObject, newLayer) {
 }
 
 function OnDeath(){
+	if(dying)
+		AudioSource.PlayClipAtPoint(dying, collider.transform.position);
+
 	OnDeselection(null);
 	tag = "Untagged";
 	var minimapIcon : Transform = gameObject.transform.Find("minimapIcon");
 	if (minimapIcon){
 		minimapIcon.renderer.enabled = false;
-	} 
+	}
 	collider.enabled = false;
 	Destroy(this);
+}
+
+function OnMoveTo(goal : Vector3) {
+	if(confirm && gameObject.tag == 'Player')
+		AudioSource.PlayClipAtPoint(confirm, (collider.transform.position+Vector3(0, 4, 0)));
 }
 
 

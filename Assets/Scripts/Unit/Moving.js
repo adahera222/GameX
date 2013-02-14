@@ -244,7 +244,7 @@ function TestWay(dir : Vector3, deg : float, range : float, left : Vector3) : Ra
 	return hitM;
 }
 
-function OnMoveTo(goal : Vector3){
+function OnMoveTo(goal : Vector3) {
 	moveTo = goal;
 
 	//alle Waypoints auf die aktuelle Position setzen
