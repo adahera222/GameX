@@ -63,7 +63,7 @@ function move(direction : Vector3){
 	var dir = quat * direction  * Time.deltaTime * speed;
 	cam.transform.Translate(dir, Space.World);
 	//höhe zum Boden halten... ist noch zu überarbeiten.
-	cam.transform.position.y = getPoint().y + actualDistance;
+	//cam.transform.position.y = getPoint().y + actualDistance;
 
 
 	if (!IsInside(area.collider, getPoint())){

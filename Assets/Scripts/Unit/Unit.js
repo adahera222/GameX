@@ -62,8 +62,11 @@ function SetLayerRecursively(obj : GameObject, newLayer) {
 }
 
 function OnDeath(){
-	if(dying)
-		AudioSource.PlayClipAtPoint(dying, collider.transform.position);
+	if(dying){
+		var pos = transform.position;
+		pos.y = GameObject.Find("Main Camera").transform.position.y;
+		AudioSource.PlayClipAtPoint(dying, pos);
+	}
 
 	OnDeselection(null);
 	tag = "Untagged";
@@ -76,8 +79,11 @@ function OnDeath(){
 }
 
 function OnMoveTo(goal : Vector3) {
-	if(confirm && gameObject.tag == 'Player')
-		AudioSource.PlayClipAtPoint(confirm, (collider.transform.position+Vector3(0, 4, 0)));
+	if(confirm && gameObject.tag == 'Player' && GetComponent(Attack) && GetComponent(Attack).getTarget() == null){
+		var pos = transform.position;
+		pos.y = GameObject.Find("Main Camera").transform.position.y;
+		AudioSource.PlayClipAtPoint(confirm, pos);
+	}
 }
 
 

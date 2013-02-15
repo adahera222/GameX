@@ -7,23 +7,22 @@ var objectsCooldownPercent : int[];
 var objectsQueue: int[];
 var mustPlace : boolean;
 var spawn : GameObject;
+var buildRadius = 15.0;
 
 private var needToPlace : boolean = false;
 private var tempPlaced : GameObject;
 private var tempIndex : int;
 private var firstClick : boolean = true;
-
+private var colliding = 0;
 private var money : Money;
 
-function Start ()
-{
+function Start (){
 	objectsCooldownPercent = new int[objectsCanCreate.Length];
 	objectsQueue = new int[objectsCanCreate.Length];
 	InvokeRepeating("CheckQueue", 0, 0.1);
 }
 
-function Update ()
-{
+function Update (){
 	if(needToPlace) {
 		var pos : Vector3 = getCurrentPoint();
 		pos.y += tempPlaced.GetComponent(Attributes).spawnHeight;
@@ -38,6 +37,25 @@ function Update ()
 			needToPlace = false;
 			Destroy(tempPlaced);
 		}
+		
+		if (tempPlaced.GetComponent(Building).isBuildable(transform.position, buildRadius)){
+			tempPlaced.renderer.material.color = Color.white;
+		}else{
+			tempPlaced.renderer.material.color = Color.red;
+		}
+	}
+}
+function OnTriggerEnter(col:Collider){
+	if (col.tag != "Area" && col.gameObject.name != "Terrain"){
+		colliding++;
+		//Debug.Log("Enter: " + col.gameObject.name);
+	}
+}
+
+function OnTriggerExit(col: Collider){
+	if (col.tag != "Area" && col.gameObject.name != "Terrain"){
+		colliding--;
+		//Debug.Log("Exit: " + col.gameObject.name);
 	}
 }
 
@@ -98,7 +116,7 @@ function Build(index : int){
 }
 
 //Für KI
-function Build(index : int, pos : Vector3){
+function Build(index : int, pos : Vector3):boolean{
 	if (money == null){
 		if (gameObject.tag == "Player"){
 			money = GameObject.Find("PlayerScripts").GetComponent(Money);
@@ -119,14 +137,21 @@ function Build(index : int, pos : Vector3){
 		pos.y = tempPlaced.GetComponent(Attributes).spawnHeight;
 		tempPlaced.transform.position = pos;
 		tempPlaced.AddComponent(EnemyBehavior);
-		PlaceBuilding(index);
+		if (tempPlaced.GetComponent(Building).isBuildable(transform.position, buildRadius)){
+			PlaceBuilding(index);
+			return true;
+		}else{
+			Destroy(tempPlaced);
+			return false;
+		}
 	}
+	return true;
 }
 
 function PlaceBuilding(index : int){
 	var unitAttributes : Attributes = tempPlaced.GetComponent(Attributes);
 	
-	if(money.Pay(unitAttributes.cost)){
+	if(tempPlaced.GetComponent(Building).isBuildable(transform.position, buildRadius) && money.Pay(unitAttributes.cost)){
 		needToPlace = false;
 		
 		var building = tempPlaced;
@@ -137,6 +162,7 @@ function PlaceBuilding(index : int){
 		var pos = building.transform.position;
 		var startpos = pos;
 		startpos.y = -2*building.collider.bounds.extents.y;
+		building.collider.bounds.Expand(Vector3(0,10,0));
 		building.transform.position = startpos;
 		var builtTime = Time.time + unitAttributes.buildtime;
 		
@@ -159,7 +185,20 @@ function PlaceBuilding(index : int){
 	}
 }
 
+function isBuildable(pos:Vector3, radius:float) : boolean{
+	if (Vector3.Distance(pos, transform.position) > radius)
+		return false;
+	return (colliding == 0 && IsInside(gameObject.Find("Area_All").collider, transform.position));
+}
 
+function IsInside(collider : Collider, point : Vector3) : boolean{
+	var center : Vector3 = collider.bounds.center;
+	var direction : Vector3 = center - point;
+	var ray : Ray = new Ray(point, direction);
+	var hitinfo : RaycastHit;
+	
+	return !collider.Raycast(ray, hitinfo, direction.magnitude);
+}
 
 function updateMinimapIconAndTag (go : GameObject){
 	//Minimap Icon

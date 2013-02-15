@@ -25,18 +25,16 @@ function tryToBuild() {
 			if (!base.mustPlace){
 				base.Build(buildNext);
 			}else{
-				pos.x -= Random.Range(5, 10);
-				pos.z -= Random.Range(5, 10);
+				var counter = 0;
+				do{
+					var buildRadius = base.buildRadius;
+					pos.x = Random.Range(-1*buildRadius, buildRadius);
+					pos.z = Random.Range(-1*buildRadius, buildRadius);
 
-				pos += base.transform.position;
-				
-				base.Build(buildNext, pos);
-				//pos.y = gO.GetComponent(Attributes).spawnHeight;
+					pos += base.transform.position;
+					counter++;			
+				}while(!base.Build(buildNext, pos) && counter < 100);
 
-				//created = Instantiate (gO, pos, gO.transform.rotation);
-				//created.tag = base.tag;
-				//created.AddComponent(EnemyBehavior);
-				//updateMinimapIcon(created);
 			}
 
 			buildNext++;
